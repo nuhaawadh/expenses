@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #faf9f7;
+  --color-surface: #ffffff;
+  --color-line: #e7e3dd;
+  --color-line-soft: #f0ece6;
+  --color-ink: #1a1714;
+  --color-muted: #7b736a;
+  --color-faint: #a8a096;
+  --color-accent: #9a5b12;
+  --color-accent-soft: #f6efe4;
+  --color-expense: #9d2235;
+  --color-income: #1f6b3f;
+
+  --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-canvas: #14120f;
+    --color-surface: #1c1916;
+    --color-line: #2e2a25;
+    --color-line-soft: #241f1b;
+    --color-ink: #f2ede6;
+    --color-muted: #a29a90;
+    --color-faint: #766e65;
+    --color-accent: #d99a4e;
+    --color-accent-soft: #2a2119;
+    --color-expense: #e2788a;
+    --color-income: #6cc08c;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* الأرقام في الجداول المالية يجب أن تصطف عمودياً */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.28s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
