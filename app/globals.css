@@ -1,35 +1,54 @@
 @import "tailwindcss";
 
-@theme {
-  --color-canvas: #faf9f7;
-  --color-surface: #ffffff;
-  --color-line: #e7e3dd;
-  --color-line-soft: #f0ece6;
-  --color-ink: #1a1714;
-  --color-muted: #7b736a;
-  --color-faint: #a8a096;
-  --color-accent: #9a5b12;
-  --color-accent-soft: #f6efe4;
-  --color-expense: #9d2235;
-  --color-income: #1f6b3f;
+/*
+ * الألوان تُعرَّف كمتغيّرات CSS عادية حتى يمكن تبديلها في الوضع الداكن،
+ * ثم يشير إليها `@theme inline` فتصير أدوات Tailwind (bg-canvas…).
+ * `inline` ضرورية: بدونها تُثبَّت القيمة وقت البناء ولا يعمل التبديل.
+ * ولا يصحّ وضع `@theme` داخل `@media` — Tailwind v4 يقبله في المستوى الأعلى فقط.
+ */
 
-  --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+:root {
+  --c-canvas: #faf9f7;
+  --c-surface: #ffffff;
+  --c-line: #e7e3dd;
+  --c-line-soft: #f0ece6;
+  --c-ink: #1a1714;
+  --c-muted: #7b736a;
+  --c-faint: #a8a096;
+  --c-accent: #9a5b12;
+  --c-accent-soft: #f6efe4;
+  --c-expense: #9d2235;
+  --c-income: #1f6b3f;
 }
 
 @media (prefers-color-scheme: dark) {
-  @theme {
-    --color-canvas: #14120f;
-    --color-surface: #1c1916;
-    --color-line: #2e2a25;
-    --color-line-soft: #241f1b;
-    --color-ink: #f2ede6;
-    --color-muted: #a29a90;
-    --color-faint: #766e65;
-    --color-accent: #d99a4e;
-    --color-accent-soft: #2a2119;
-    --color-expense: #e2788a;
-    --color-income: #6cc08c;
+  :root {
+    --c-canvas: #14120f;
+    --c-surface: #1c1916;
+    --c-line: #2e2a25;
+    --c-line-soft: #241f1b;
+    --c-ink: #f2ede6;
+    --c-muted: #a29a90;
+    --c-faint: #766e65;
+    --c-accent: #d99a4e;
+    --c-accent-soft: #2a2119;
+    --c-expense: #e2788a;
+    --c-income: #6cc08c;
   }
+}
+
+@theme inline {
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-line: var(--c-line);
+  --color-line-soft: var(--c-line-soft);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-faint: var(--c-faint);
+  --color-accent: var(--c-accent);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-expense: var(--c-expense);
+  --color-income: var(--c-income);
 }
 
 html {
@@ -37,8 +56,8 @@ html {
 }
 
 body {
-  background-color: var(--color-canvas);
-  color: var(--color-ink);
+  background-color: var(--c-canvas);
+  color: var(--c-ink);
   -webkit-font-smoothing: antialiased;
 }
 

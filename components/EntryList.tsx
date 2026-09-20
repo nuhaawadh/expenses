@@ -16,7 +16,9 @@ function Row({ entry, isNew }: { entry: Entry; isNew: boolean }) {
           {entry.vendor && entry.vendor !== title ? ` · ${entry.vendor}` : ""}
         </p>
       </div>
+      {/* dir="ltr" ضروري: علامة +/− محايدة اتجاهياً، وبدونها يعيد RTL ترتيبها فتظهر بعد الرقم */}
       <p
+        dir="ltr"
         className={`tnum shrink-0 text-[15px] font-medium ${income ? "text-income" : "text-ink"}`}
       >
         {income ? "+" : "−"}
