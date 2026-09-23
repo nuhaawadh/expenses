@@ -1,28 +1,20 @@
 /**
- * Brand details and swappable integrations, shared by every language.
- * Replace the placeholders here — no component needs to change.
- * Page copy lives in lib/i18n.ts.
+ * Brand-level settings shared by both languages. Replace the placeholders here.
  */
 export const site = {
   name: "HIGHLink",
-  url: "https://highlink.ai", // TODO: set the production domain
+  url: "https://highlink.ai", // TODO: production domain
   email: "[EMAIL]", // e.g. "hello@highlink.ai"
 
-  /**
-   * Scheduling embed URL (Calendly, Cal.com, SavvyCal, HubSpot…).
-   * Leave empty to show the placeholder panel.
-   */
+  /** Sales video. Leave `src` empty to show the placeholder frame. */
+  video: { src: "", poster: "" },
+
+  /** Seconds of the video a visitor must watch before booking unlocks (reference: 6 minutes). */
+  unlockAfterSeconds: 6 * 60,
+
+  /** Scheduling embed URL (Calendly, Cal.com, GoHighLevel…). Empty shows a placeholder. */
   bookingUrl: "",
 
-  /**
-   * Hero demonstration video (MP4/WebM in /public or a CDN URL).
-   * Leave empty to show the animated system visualization.
-   */
-  heroVideo: { src: "", poster: "" },
-} as const;
-
-export const anchors = {
-  primary: "#booking",
-  secondary: "#how-it-works",
-  call: "#booking",
+  /** Browser-storage key that remembers an unlocked booking across visits and tabs. */
+  unlockKey: "highlink:vsl:booking-unlocked",
 } as const;

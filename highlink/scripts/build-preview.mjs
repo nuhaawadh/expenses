@@ -13,13 +13,22 @@ const OUT = process.argv[2] ?? "preview";
 // The entry page is written as a fragment: the host wraps it in its own document.
 // Secondary pages are served as-is, so they are written as complete documents.
 const PAGES = [
-  { file: "index.html", out: "index.html", title: "HIGHLink Website", fragment: true },
-  { file: "ar.html", out: "ar.html", fragment: false },
+  { file: "ar.html", out: "index.html", route: "/ar", title: "HIGHLink", fragment: true },
+  { file: "en.html", out: "en.html", route: "/en" },
+  { file: "ar/privacy.html", out: "ar-privacy.html", route: "/ar/privacy" },
+  { file: "ar/terms.html", out: "ar-terms.html", route: "/ar/terms" },
+  { file: "en/privacy.html", out: "en-privacy.html", route: "/en/privacy" },
+  { file: "en/terms.html", out: "en-terms.html", route: "/en/terms" },
 ];
-// Route → file, for the language switch.
-const LINKS = { '"/ar"': '"ar.html"', '"/"': '"index.html"' };
-// Same links as they appear inside the serialized React payload.
-const PAYLOAD_LINKS = { '\\"href\\":\\"/ar\\"': '\\"href\\":\\"ar.html\\"', '\\"href\\":\\"/\\"': '\\"href\\":\\"index.html\\"' };
+// Site routes → preview files, in HTML attributes and inside the serialized React payload.
+const ROUTES = PAGES.map((p) => [p.route, p.out]);
+const rewriteLinks = (html) => {
+  for (const [route, file] of ROUTES) {
+    html = html.split(`href="${route}"`).join(`href="${file}"`);
+    html = html.split(`\\"href\\":\\"${route}\\"`).join(`\\"href\\":\\"${file}\\"`);
+  }
+  return html;
+};
 
 const read = (p) => readFileSync(join(SRC, p.replace(/^\//, "")));
 
@@ -42,6 +51,9 @@ for (const page of PAGES) {
   const html = read(page.file).toString();
   const htmlTag = html.match(/<html([^>]*)>/)[1];
   const attr = (n) => (htmlTag.match(new RegExp(`${n}="([^"]*)"`)) || [])[1] ?? "";
+  const head = html.match(/<head>([\s\S]*?)<\/head>/)[1];
+  // Inline <head> scripts (e.g. the no-flash theme script) must still run first.
+  const headScripts = (head.match(/<script>[\s\S]*?<\/script>/g) || []).join("");
   const title = page.title ?? (html.match(/<title>([^<]*)<\/title>/) || [])[1] ?? "HIGHLink";
 
   const styles = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"[^>]*\/>/g)].map((m) => inlineCss(m[1]));
@@ -64,13 +76,13 @@ for (const page of PAGES) {
   body = body.replace(/\d*:HL\[\\"\/_next\/static\/[^\]]*\]\\n/g, "");
   // React re-creates the stylesheet <link>s from the payload; point them at empty CSS.
   body = body.replace(/\/_next\/static\/css\/[\w-]+\.css/g, "data:text/css,");
-  for (const [from, to] of Object.entries(LINKS)) body = body.split(`href=${from}`).join(`href=${to}`);
-  for (const [from, to] of Object.entries(PAYLOAD_LINKS)) body = body.split(from).join(to);
+  body = rewriteLinks(body);
 
   const style = `<style>${styles.join("\n")}\n${HOST_OVERRIDES}</style>`;
   const out = page.fragment
     ? [
         `<title>${title}</title>`,
+        headScripts,
         `<script>(function(d){d.lang=${JSON.stringify(attr("lang"))};d.dir=${JSON.stringify(attr("dir"))};d.className=${JSON.stringify(attr("class"))};})(document.documentElement)</script>`,
         style,
         body,
@@ -80,6 +92,7 @@ for (const page of PAGES) {
         `<!DOCTYPE html><html${htmlTag}><head><meta charset="utf-8"/>`,
         `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>`,
         `<title>${title}</title>`,
+        headScripts,
         style,
         `</head><body>`,
         body,

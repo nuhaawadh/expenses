@@ -1,14 +1,14 @@
 import localFont from "next/font/local";
 import { RootShell } from "@/components/RootShell";
-import { buildMetadata } from "@/lib/metadata";
 import "../globals.css";
 
+export { viewport } from "@/lib/metadata";
+
 /**
- * IBM Plex Sans Arabic, limited to the Arabic Unicode blocks (plus spaces
- * and shared punctuation, so Arabic word spacing is right) — Latin letters
- * and digits (HIGHLink, CRM, 01) keep rendering in Geist.
+ * IBM Plex Sans Arabic (OFL), limited to Arabic ranges plus spaces and shared
+ * punctuation; Latin text keeps the system sans used by the English page.
  */
-const plexArabic = localFont({
+const arabic = localFont({
   src: [
     { path: "../fonts/plex-arabic-400.woff2", weight: "400" },
     { path: "../fonts/plex-arabic-500.woff2", weight: "500" },
@@ -27,12 +27,9 @@ const plexArabic = localFont({
   ],
 });
 
-export { viewport } from "@/lib/metadata";
-export const metadata = buildMetadata("ar");
-
 export default function ArabicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <RootShell locale="ar" fontClass={plexArabic.variable}>
+    <RootShell locale="ar" fontClass={arabic.variable}>
       {children}
     </RootShell>
   );

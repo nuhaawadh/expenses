@@ -1,9 +1,7 @@
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Providers } from "./Providers";
-import { getDict, type Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/content";
+import { themeInitScript } from "./ThemeToggle";
 
-/** <html> for each locale: sets lang/dir so the whole page flips for Arabic. */
+/** <html> per language: lang/dir flip the whole page for Arabic. */
 export function RootShell({
   locale,
   fontClass = "",
@@ -13,23 +11,12 @@ export function RootShell({
   fontClass?: string;
   children: React.ReactNode;
 }) {
-  const t = getDict(locale);
   return (
-    <html
-      lang={locale}
-      dir={locale === "ar" ? "rtl" : "ltr"}
-      className={`${GeistSans.variable} ${GeistMono.variable} ${fontClass}`}
-    >
-      <body>
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-fg focus:px-4 focus:py-2 focus:text-ink"
-        >
-          {t.common.skip}
-        </a>
-        <div aria-hidden className="veil pointer-events-none fixed inset-0 z-[90] bg-ink" />
-        <Providers>{children}</Providers>
-      </body>
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} className={fontClass} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }

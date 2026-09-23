@@ -1,57 +1,68 @@
+import { content, other, paths, type Locale } from "@/lib/content";
 import { site } from "@/lib/site";
-import type { Dict } from "@/lib/i18n";
-import type { LangSwitch as LS } from "./HomePage";
-import { Logo } from "./ui/Logo";
-import { LangSwitch } from "./ui/LangSwitch";
+import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 
-export function Footer({ t, langSwitch }: { t: Dict; langSwitch: LS }) {
-  const year = new Date().getFullYear();
-  const f = t.footer;
-  const LINKS = [{ label: t.common.home, href: "#top" }, ...t.nav];
+export function Footer({ locale }: { locale: Locale }) {
+  const t = content[locale].footer;
+  const p = paths[locale];
+  const alt = other(locale);
+  const link = "text-fg underline underline-offset-2 transition-colors hover:text-progress";
+
   return (
-    <footer className="relative border-t border-line pt-20 pb-10 md:pt-28">
-      <div className="frame">
-        <div className="grid gap-14 md:grid-cols-12">
-          <div className="md:col-span-6">
+    <footer className="relative z-10">
+      <div className="mx-auto max-w-4xl px-4 py-8 md:py-12">
+        <div className="mb-5 md:mb-7">
+          <a href={p.home} className="inline-block text-[28px] md:text-[34px]" aria-label={t.logoAlt}>
             <Logo />
-            <p className="mt-8 text-[clamp(1.75rem,3.4vw,2.75rem)] font-medium leading-[1.02] tracking-[-0.04em]">
-              {f.tagline[0]}
-              <br />
-              <span className="text-mute">{f.tagline[1]}</span>
-              <br />
-              <span className="text-dim">{f.tagline[2]}</span>
-            </p>
+          </a>
+        </div>
+
+        <div className="space-y-5 text-xs leading-relaxed text-muted md:text-sm">
+          <div>
+            <p className="label mb-1.5 text-[10px] tracking-wider text-fg uppercase">{t.disclaimerLabel}</p>
+            <p>{t.disclaimer}</p>
           </div>
-
-          <nav aria-label="Footer" className="md:col-span-3">
-            <p className="t-eyebrow">{f.navigate}</p>
-            <ul className="mt-6 space-y-1">
-              {LINKS.map((l) => (
-                <li key={l.label}>
-                  <a href={l.href} className="inline-block py-1.5 text-[15px] text-mute transition-colors duration-300 hover:text-fg">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="md:col-span-3">
-            <p className="t-eyebrow">{f.contact}</p>
-            {site.email === "[EMAIL]" ? (
-              <p className="mt-6 py-1.5 font-mono text-sm text-mute">[EMAIL]</p>
-            ) : (
-              <a href={`mailto:${site.email}`} className="mt-6 inline-block py-1.5 text-[15px] text-fg hover:text-accent">
-                {site.email}
-              </a>
-            )}
-            <LangSwitch s={langSwitch} className="mt-6" />
+          <div>
+            <p className="mb-2 text-sm font-semibold text-fg">{t.fitTitle}</p>
+            {t.fit.map((para, i) => (
+              <p key={i} className={i ? "mt-2" : ""}>
+                {para}
+              </p>
+            ))}
+          </div>
+          <div className="pt-3 md:pt-4">
+            <p className="label mb-1.5 text-[10px] tracking-wider text-fg uppercase">{t.questions}</p>
+            <p>
+              {site.email === "[EMAIL]" ? (
+                <span dir="ltr" className="text-fg select-all">
+                  {site.email}
+                </span>
+              ) : (
+                <a dir="ltr" href={`mailto:${site.email}`} className={link}>
+                  {site.email}
+                </a>
+              )}
+            </p>
           </div>
         </div>
 
-        <div className="mt-20 flex flex-col-reverse gap-4 border-t border-line pt-8 text-[12px] text-dim md:mt-28 md:flex-row md:items-center md:justify-between">
-          <p>© {year} HIGHLink. {f.rights}</p>
-          <p className="font-mono tracking-[0.14em]">{f.strap}</p>
+        <div className="mt-6 flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between md:mt-10 md:pt-6">
+          <p className="text-xs text-muted">
+            © {new Date().getFullYear()} {site.name}. {t.rights}
+          </p>
+          <div className="flex flex-wrap items-center gap-4 text-sm">
+            <ThemeToggle label={t.theme} />
+            <a href={p.privacy} className={link}>
+              {t.privacy}
+            </a>
+            <a href={p.terms} className={link}>
+              {t.terms}
+            </a>
+            <a href={paths[alt].home} hrefLang={alt} lang={alt} aria-label={t.languageAria} className={link}>
+              {t.language}
+            </a>
+          </div>
         </div>
       </div>
     </footer>
