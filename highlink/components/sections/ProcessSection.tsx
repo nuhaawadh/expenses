@@ -3,19 +3,13 @@
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ease } from "@/lib/motion";
+import type { Dict } from "@/lib/i18n";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Reveal } from "../ui/Reveal";
 import { SplitHeadline } from "../ui/SplitHeadline";
 
-const STEPS = [
-  { title: "Understand", body: "We map how your business actually works." },
-  { title: "Design", body: "We identify where AI and automation create leverage." },
-  { title: "Build", body: "We build the workflows, agents, integrations, and systems." },
-  { title: "Deploy", body: "We connect everything to the tools your business already uses." },
-  { title: "Optimize", body: "We continuously improve the system as your business evolves." },
-];
-
-export function ProcessSection() {
+export function ProcessSection({ t }: { t: Dict["process"] }) {
+  const STEPS = t.steps;
   const listRef = useRef<HTMLOListElement>(null);
   const [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 60%", "end 60%"] });
@@ -27,11 +21,11 @@ export function ProcessSection() {
         <div className="lg:col-span-6">
           <div className="lg:sticky lg:top-36">
             <Reveal>
-              <Eyebrow index="04">How it works</Eyebrow>
+              <Eyebrow index="04">{t.eyebrow}</Eyebrow>
             </Reveal>
             <SplitHeadline
               id="process-title"
-              lines={["From Chaos", "to an AI-Powered", "System."]}
+              lines={t.title}
               dimFrom={1}
               className="t-display-sm mt-8"
             />
@@ -53,10 +47,10 @@ export function ProcessSection() {
         </div>
 
         <ol ref={listRef} className="relative lg:col-span-5 lg:col-start-8">
-          <span aria-hidden className="absolute left-0 top-0 bottom-0 w-px bg-line-2" />
+          <span aria-hidden className="absolute start-0 top-0 bottom-0 w-px bg-line-2" />
           <motion.span
             aria-hidden
-            className="absolute left-0 top-0 bottom-0 w-px origin-top bg-accent"
+            className="absolute start-0 top-0 bottom-0 w-px origin-top bg-accent"
             style={{ scaleY: progress }}
           />
           {STEPS.map((s, i) => (
@@ -75,7 +69,7 @@ function Step({
   onActive,
 }: {
   index: number;
-  step: (typeof STEPS)[number];
+  step: { title: string; body: string };
   active: boolean;
   onActive: (i: number) => void;
 }) {
@@ -89,11 +83,11 @@ function Step({
   return (
     <li
       ref={ref}
-      className={`relative py-10 pl-8 transition-opacity duration-700 md:pl-14 lg:py-16 ${active ? "opacity-100" : "opacity-100 lg:opacity-30"}`}
+      className={`relative py-10 ps-8 transition-opacity duration-700 md:ps-14 lg:py-16 ${active ? "opacity-100" : "opacity-100 lg:opacity-30"}`}
     >
       <span
         aria-hidden
-        className={`absolute -left-[4px] top-[3.35rem] h-[9px] w-[9px] rounded-full border transition-colors duration-500 lg:top-[4.6rem] ${
+        className={`absolute -start-[4px] top-[3.35rem] h-[9px] w-[9px] rounded-full border transition-colors duration-500 lg:top-[4.6rem] ${
           active ? "border-accent bg-accent" : "border-line-2 bg-ink"
         }`}
       />

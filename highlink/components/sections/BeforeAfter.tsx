@@ -2,22 +2,14 @@
 
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useRef } from "react";
+import type { Dict } from "@/lib/i18n";
 import { Eyebrow } from "../ui/Eyebrow";
-
-const ROWS = [
-  ["Manual follow-ups", "AI-powered follow-up"],
-  ["Disconnected tools", "Connected systems"],
-  ["Repeated tasks", "Automated workflows"],
-  ["Information everywhere", "Centralized business knowledge"],
-  ["Founder-dependent decisions", "AI-assisted decisions"],
-  ["Slow execution", "Faster execution"],
-];
 
 /**
  * Scroll-scrubbed transformation: the section pins, and each "before"
  * gets struck through as its "after" comes online.
  */
-export function BeforeAfter() {
+export function BeforeAfter({ t, rtl }: { t: Dict["beforeAfter"]; rtl: boolean }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
@@ -38,28 +30,28 @@ export function BeforeAfter() {
         <div className="frame relative">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <Eyebrow index="05">Before / After</Eyebrow>
+              <Eyebrow index="05">{t.eyebrow}</Eyebrow>
               <motion.h2 id="ba-title" style={{ opacity: headlineDim }} className="t-display mt-6 md:mt-8">
-                Stop Being <span className="text-mute">the System.</span>
+                {t.title[0]} <span className="text-mute">{t.title[1]}</span>
               </motion.h2>
             </div>
             <div className="flex items-center gap-3 md:pb-3" aria-hidden>
-              <span className="font-mono text-[10px] tracking-[0.2em] text-dim">BEFORE</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-dim">{t.before}</span>
               <span className="relative h-px w-24 bg-line-2 md:w-40">
-                <motion.span style={{ scaleX: meter }} className="absolute inset-0 origin-left bg-accent" />
+                <motion.span style={{ scaleX: meter }} className="absolute inset-0 origin-left bg-accent rtl:origin-right" />
               </span>
-              <span className="font-mono text-[10px] tracking-[0.2em] text-accent">AFTER</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">{t.after}</span>
             </div>
           </div>
 
           <div className="mt-10 md:mt-16">
             <div className="hidden grid-cols-12 gap-10 pb-4 md:grid" aria-hidden>
-              <span className="col-span-5 font-mono text-[10px] tracking-[0.2em] text-dim">BEFORE</span>
-              <span className="col-span-6 col-start-7 font-mono text-[10px] tracking-[0.2em] text-dim">AFTER</span>
+              <span className="col-span-5 font-mono text-[10px] uppercase tracking-[0.2em] text-dim">{t.before}</span>
+              <span className="col-span-6 col-start-7 font-mono text-[10px] uppercase tracking-[0.2em] text-dim">{t.after}</span>
             </div>
             <ul>
-              {ROWS.map(([before, after], i) => (
-                <Row key={before} p={p} i={i} before={before} after={after} />
+              {t.rows.map(([before, after], i) => (
+                <Row key={before} p={p} i={i} before={before} after={after} labels={[t.before, t.after]} rtl={rtl} />
               ))}
             </ul>
           </div>
@@ -69,27 +61,41 @@ export function BeforeAfter() {
   );
 }
 
-function Row({ p, i, before, after }: { p: MotionValue<number>; i: number; before: string; after: string }) {
+function Row({
+  p,
+  i,
+  before,
+  after,
+  labels,
+  rtl,
+}: {
+  p: MotionValue<number>;
+  i: number;
+  before: string;
+  after: string;
+  labels: [string, string];
+  rtl: boolean;
+}) {
   const start = 0.08 + i * 0.105;
   const end = start + 0.09;
   const strike = useTransform(p, [start, end], [0, 1]);
   const beforeOpacity = useTransform(p, [start, end], [1, 0.4]);
   const afterOpacity = useTransform(p, [start, end], [0.12, 1]);
-  const afterX = useTransform(p, [start, end], [-12, 0]);
+  const afterX = useTransform(p, [start, end], [rtl ? 12 : -12, 0]);
   const dot = useTransform(p, [start, end], [0, 1]);
 
   return (
     <li className="grid grid-cols-1 gap-1 border-t border-line py-3 md:grid-cols-12 md:items-center md:gap-10 md:py-5">
       <motion.span style={{ opacity: beforeOpacity }} className="relative w-fit text-[15px] text-mute md:col-span-5 md:text-2xl md:tracking-[-0.03em]">
-        <span className="sr-only">Before: </span>
+        <span className="sr-only">{labels[0]}: </span>
         {before}
         <motion.span
           aria-hidden
           style={{ scaleX: strike }}
-          className="absolute left-0 right-0 top-1/2 h-px origin-left bg-mute"
+          className="absolute inset-x-0 top-1/2 h-px origin-left bg-mute rtl:origin-right"
         />
       </motion.span>
-      <span aria-hidden className="hidden text-center font-mono text-dim md:col-span-1 md:block">
+      <span aria-hidden className="hidden text-center font-mono text-dim md:col-span-1 md:block rtl:-scale-x-100">
         →
       </span>
       <motion.span
@@ -97,7 +103,7 @@ function Row({ p, i, before, after }: { p: MotionValue<number>; i: number; befor
         className="flex items-center gap-3 text-xl font-medium tracking-[-0.035em] md:col-span-6 md:text-[2rem] md:leading-tight"
       >
         <motion.span aria-hidden style={{ scale: dot }} className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-        <span className="sr-only">After: </span>
+        <span className="sr-only">{labels[1]}: </span>
         {after}
       </motion.span>
     </li>

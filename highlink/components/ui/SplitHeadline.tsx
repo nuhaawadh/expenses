@@ -45,7 +45,7 @@ export function SplitHeadline({
           {line.split(" ").map((word, wi) => {
             const i = wordIndex++;
             return (
-              <span key={wi} className="inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-top">
+              <span key={wi} className="split-word inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-top">
                 <motion.span
                   className="inline-block will-change-transform"
                   variants={{

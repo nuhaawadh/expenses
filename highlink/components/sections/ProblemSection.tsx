@@ -2,32 +2,23 @@
 
 import { motion } from "framer-motion";
 import { ease, viewportOnce } from "@/lib/motion";
+import type { Dict } from "@/lib/i18n";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Reveal } from "../ui/Reveal";
 import { SplitHeadline } from "../ui/SplitHeadline";
 
-const PROBLEMS = [
-  { title: "Too many tools", body: "Your business runs across disconnected platforms." },
-  { title: "Manual work", body: "Your team spends time repeating work AI could handle." },
-  {
-    title: "Knowledge is scattered",
-    body: "Important information lives across documents, chats, spreadsheets, CRM systems, and people’s heads.",
-  },
-  { title: "Founder dependency", body: "Too many decisions still require you." },
-];
-
-export function ProblemSection() {
+export function ProblemSection({ t }: { t: Dict["problem"] }) {
   return (
     <section className="section relative" aria-labelledby="problem-title">
       <div className="frame">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-8">
             <Reveal>
-              <Eyebrow index="01">The problem</Eyebrow>
+              <Eyebrow index="01">{t.eyebrow}</Eyebrow>
             </Reveal>
             <SplitHeadline
               id="problem-title"
-              lines={["AI Doesn’t Fix a", "Broken System."]}
+              lines={t.title}
               dimFrom={1}
               className="t-display mt-8"
             />
@@ -35,20 +26,19 @@ export function ProblemSection() {
           <div className="flex flex-col justify-end gap-5 lg:col-span-4">
             <Reveal delay={0.1}>
               <p className="text-lg font-medium tracking-[-0.02em] text-fg md:text-xl">
-                Most businesses don’t need another AI tool.
+                {t.lead}
               </p>
             </Reveal>
             <Reveal delay={0.18}>
               <p className="t-lead pretty">
-                They need their existing knowledge, processes, people, and technology connected into a system that
-                actually works together.
+                {t.body}
               </p>
             </Reveal>
           </div>
         </div>
 
         <ol className="mt-20 md:mt-28">
-          {PROBLEMS.map((p, i) => (
+          {t.items.map((p, i) => (
             <motion.li
               key={p.title}
               initial="hidden"
@@ -58,7 +48,7 @@ export function ProblemSection() {
             >
               <motion.span
                 aria-hidden
-                className="absolute inset-x-0 top-0 h-px origin-left bg-line-2"
+                className="absolute inset-x-0 top-0 h-px origin-left bg-line-2 rtl:origin-right"
                 variants={{ hidden: { scaleX: 0 }, shown: { scaleX: 1, transition: { duration: 1.2, ease, delay: i * 0.08 } } }}
               />
               <motion.span
@@ -68,7 +58,7 @@ export function ProblemSection() {
                 0{i + 1}
               </motion.span>
               <motion.h3
-                className="text-[clamp(1.6rem,3.2vw,2.75rem)] font-medium leading-[1.02] tracking-[-0.04em] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:col-span-5 md:group-hover:translate-x-2"
+                className="text-[clamp(1.6rem,3.2vw,2.75rem)] font-medium leading-[1.02] tracking-[-0.04em] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:col-span-5 md:group-hover:translate-x-2 rtl:md:group-hover:-translate-x-2"
                 variants={{
                   hidden: { opacity: 0, y: 24 },
                   shown: { opacity: 1, y: 0, transition: { duration: 0.9, ease, delay: 0.15 + i * 0.08 } },

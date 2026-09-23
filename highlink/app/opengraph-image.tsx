@@ -3,6 +3,7 @@ import { ImageResponse } from "next/og";
 export const alt = "HIGHLink — We Build the System. You Scale the Business.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamic = "force-static";
 
 export default function OpengraphImage() {
   return new ImageResponse(

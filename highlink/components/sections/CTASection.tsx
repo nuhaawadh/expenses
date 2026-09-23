@@ -1,9 +1,10 @@
-import { ctas } from "@/lib/site";
+import { anchors } from "@/lib/site";
+import type { Dict } from "@/lib/i18n";
 import { MagneticButton } from "../ui/MagneticButton";
 import { Reveal } from "../ui/Reveal";
 import { SplitHeadline } from "../ui/SplitHeadline";
 
-export function CTASection() {
+export function CTASection({ t, cta }: { t: Dict["final"]; cta: Dict["cta"] }) {
   return (
     <section className="relative overflow-hidden py-36 md:py-56" aria-labelledby="cta-title">
       {/* horizon */}
@@ -15,23 +16,23 @@ export function CTASection() {
       <div className="frame relative flex flex-col items-center text-center">
         <SplitHeadline
           id="cta-title"
-          lines={["Ready to Build", "Your AI System?"]}
+          lines={t.title}
           dimFrom={1}
           className="t-hero balance"
           stagger={0.07}
         />
         <Reveal delay={0.3}>
           <p className="t-lead pretty mt-10 max-w-lg">
-            Tell us how your business works.
-            <br className="hidden xs:block" /> We’ll identify where AI can create the most leverage.
+            {t.body[0]}
+            <br className="hidden xs:block" /> {t.body[1]}
           </p>
         </Reveal>
         <Reveal delay={0.4} className="mt-12 flex w-full flex-col gap-3 xs:w-auto xs:flex-row">
-          <MagneticButton href={ctas.primary.href} arrow size="lg">
-            {ctas.primary.label}
+          <MagneticButton href={anchors.primary} arrow size="lg">
+            {cta.primary}
           </MagneticButton>
-          <MagneticButton href={ctas.call.href} variant="ghost" size="lg">
-            {ctas.call.label}
+          <MagneticButton href={anchors.call} variant="ghost" size="lg">
+            {cta.call}
           </MagneticButton>
         </Reveal>
       </div>

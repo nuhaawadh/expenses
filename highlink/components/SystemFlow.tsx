@@ -3,40 +3,35 @@
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ease } from "@/lib/motion";
+import type { Dict } from "@/lib/i18n";
 
-export const FLOW_STEPS = [
-  "Mapping the business — people, tools, knowledge, processes",
-  "AI brain structures company knowledge into usable context",
-  "Agents assigned to content, sales, operations and support",
-  "Automations triggered across connected workflows",
-  "CRM, marketing, sales and operations updated in sync",
-  "Growth — more output without more headcount",
-];
+const STEP_COUNT = 6;
 
 const STEP_MS = 1900;
 
-type Node = { id: string; label: string; sub?: string; stage: number; kind?: "core" | "fn" | "goal" };
-type Pos = Record<string, [number, number]>;
+type NodeId = keyof Dict["flow"]["nodes"];
+type Node = { id: NodeId; stage: number; kind?: "core" | "fn" | "goal" };
+type Pos = Record<NodeId, [number, number]>;
 
 const NODES: Node[] = [
-  { id: "business", label: "Business", sub: "People · Tools · Knowledge", stage: 0 },
-  { id: "brain", label: "AI Brain", sub: "Context + reasoning", stage: 1, kind: "core" },
-  { id: "agents", label: "AI Agents", sub: "Digital workers", stage: 2 },
-  { id: "auto", label: "Automations", sub: "Workflows · Triggers", stage: 3 },
-  { id: "crm", label: "CRM", stage: 4, kind: "fn" },
-  { id: "mkt", label: "Marketing", stage: 4, kind: "fn" },
-  { id: "sales", label: "Sales", stage: 4, kind: "fn" },
-  { id: "ops", label: "Operations", stage: 4, kind: "fn" },
-  { id: "growth", label: "Growth", sub: "Scale", stage: 5, kind: "goal" },
+  { id: "business", stage: 0 },
+  { id: "brain", stage: 1, kind: "core" },
+  { id: "agents", stage: 2 },
+  { id: "auto", stage: 3 },
+  { id: "crm", stage: 4, kind: "fn" },
+  { id: "mkt", stage: 4, kind: "fn" },
+  { id: "sales", stage: 4, kind: "fn" },
+  { id: "ops", stage: 4, kind: "fn" },
+  { id: "growth", stage: 5, kind: "goal" },
 ];
 
-const FNS = ["crm", "mkt", "sales", "ops"];
-const EDGES: [string, string][] = [
+const FNS: NodeId[] = ["crm", "mkt", "sales", "ops"];
+const EDGES: [NodeId, NodeId][] = [
   ["business", "brain"],
   ["brain", "agents"],
   ["agents", "auto"],
-  ...FNS.map((f) => ["auto", f] as [string, string]),
-  ...FNS.map((f) => [f, "growth"] as [string, string]),
+  ...FNS.map((f) => ["auto", f] as [NodeId, NodeId]),
+  ...FNS.map((f) => [f, "growth"] as [NodeId, NodeId]),
 ];
 
 const LAYOUTS = {
@@ -83,9 +78,9 @@ function edgePath([x1, y1]: [number, number], [x2, y2]: [number, number], dir: "
   return `M${x1} ${y1} C${x1} ${my} ${x2} ${my} ${x2} ${y2}`;
 }
 
-const stageOf = (id: string) => NODES.find((n) => n.id === id)!.stage;
+const stageOf = (id: NodeId) => NODES.find((n) => n.id === id)!.stage;
 
-export function SystemFlow({ onStep }: { onStep?: (s: number) => void }) {
+export function SystemFlow({ t, rtl, onStep }: { t: Dict["flow"]; rtl: boolean; onStep?: (s: number) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-10% 0px" });
   const drawn = useInView(ref, { once: true, margin: "-10% 0px" });
@@ -95,13 +90,13 @@ export function SystemFlow({ onStep }: { onStep?: (s: number) => void }) {
 
   useEffect(() => {
     if (reduce) {
-      setStep(FLOW_STEPS.length - 1);
+      setStep(STEP_COUNT - 1);
       return;
     }
     if (!inView) return;
     const t = setInterval(() => {
       setStep((s) => {
-        const next = (s + 1) % FLOW_STEPS.length;
+        const next = (s + 1) % STEP_COUNT;
         if (next === 0) setCycle((c) => c + 1);
         return next;
       });
@@ -125,13 +120,10 @@ export function SystemFlow({ onStep }: { onStep?: (s: number) => void }) {
       />
       <div aria-hidden className="animate-scan pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-transparent via-accent/[0.035] to-transparent" />
 
-      <Canvas layout="wide" className="hidden aspect-video md:block" step={step} cycle={cycle} drawn={drawn} />
-      <Canvas layout="tall" className="aspect-[2/3] md:hidden" step={step} cycle={cycle} drawn={drawn} />
+      <Canvas layout="wide" className="hidden aspect-video md:block" step={step} cycle={cycle} drawn={drawn} t={t} rtl={rtl} />
+      <Canvas layout="tall" className="aspect-[2/3] md:hidden" step={step} cycle={cycle} drawn={drawn} t={t} rtl={rtl} />
 
-      <p className="sr-only">
-        Diagram: Business flows into an AI Brain, which directs AI Agents, which run Automations across CRM,
-        Marketing, Sales and Operations, producing Business Growth.
-      </p>
+      <p className="sr-only">{t.sr}</p>
     </div>
   );
 }
@@ -142,14 +134,25 @@ function Canvas({
   step,
   cycle,
   drawn,
+  t,
+  rtl,
 }: {
   layout: keyof typeof LAYOUTS;
   className: string;
   step: number;
   cycle: number;
   drawn: boolean;
+  t: Dict["flow"];
+  rtl: boolean;
 }) {
-  const L = LAYOUTS[layout];
+  const base = LAYOUTS[layout];
+  // Right-to-left languages read the flow from the right: mirror x positions.
+  const L = {
+    ...base,
+    pos: Object.fromEntries(
+      Object.entries(base.pos).map(([k, [x, y]]) => [k, [rtl ? base.w - x : x, y]]),
+    ) as Pos,
+  };
   const wide = layout === "wide";
 
   return (
@@ -158,7 +161,7 @@ function Canvas({
         {EDGES.map(([a, b], i) => {
           const d = edgePath(L.pos[a], L.pos[b], L.dir);
           const s = stageOf(a);
-          const lit = s < step || (step === FLOW_STEPS.length - 1 && s <= step);
+          const lit = s < step || (step === STEP_COUNT - 1 && s <= step);
           return (
             <g key={`${a}-${b}`}>
               <motion.path
@@ -200,7 +203,7 @@ function Canvas({
             className="absolute -translate-x-1/2 -translate-y-1/2"
             style={{ left: `${(x / L.w) * 100}%`, top: `${(y / L.h) * 100}%` }}
           >
-            <Chip node={n} active={active} done={done} wide={wide} />
+            <Chip node={n} copy={t.nodes[n.id]} active={active} done={done} wide={wide} />
           </motion.div>
         );
       })}
@@ -208,7 +211,19 @@ function Canvas({
   );
 }
 
-function Chip({ node, active, done, wide }: { node: Node; active: boolean; done: boolean; wide: boolean }) {
+function Chip({
+  node,
+  copy,
+  active,
+  done,
+  wide,
+}: {
+  node: Node;
+  copy: { label: string; sub: string };
+  active: boolean;
+  done: boolean;
+  wide: boolean;
+}) {
   const core = node.kind === "core";
   const goal = node.kind === "goal";
   const tone = active
@@ -231,11 +246,11 @@ function Chip({ node, active, done, wide }: { node: Node; active: boolean; done:
       )}
       <span className="flex flex-col">
         <span className={`font-mono uppercase tracking-[0.14em] ${wide ? "text-[9px] lg:text-[11px]" : "text-[9.5px]"}`}>
-          {node.label}
-          {goal && " ↗"}
+          {copy.label}
+          {goal && <span className="inline-block rtl:-scale-x-100"> ↗</span>}
         </span>
-        {node.sub && wide && (
-          <span className="mt-1 hidden text-[10.5px] tracking-normal text-dim lg:block">{node.sub}</span>
+        {copy.sub && wide && (
+          <span className="mt-1 hidden text-[10.5px] tracking-normal text-dim lg:block">{copy.sub}</span>
         )}
       </span>
     </div>

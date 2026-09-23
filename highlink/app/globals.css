@@ -244,3 +244,57 @@
     animation-delay: 0s;
   }
 }
+
+/* ——— Arabic ———
+   Arabic is a connected script: any letter-spacing breaks the joins, and
+   uppercase/tight leading tuned for Latin clips its ascenders and dots.
+   Plex Arabic is loaded with an Arabic-only unicode-range, so Latin words
+   (HIGHLink, CRM) fall through to Geist and keep the brand face. */
+html[lang="ar"] {
+  --font-sans: var(--font-arabic), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-arabic), var(--font-geist-mono), ui-monospace, monospace;
+}
+html[lang="ar"] body * {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+html[lang="ar"] .t-hero {
+  font-size: clamp(3rem, 6.6vw, 6.5rem);
+  line-height: 1.18;
+  font-weight: 600;
+}
+html[lang="ar"] .t-display {
+  font-size: clamp(2.3rem, 5.4vw, 5.25rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+html[lang="ar"] .t-display-sm {
+  font-size: clamp(2.3rem, 4.3vw, 4.1rem);
+  line-height: 1.22;
+  font-weight: 600;
+}
+html[lang="ar"] .t-title {
+  line-height: 1.25;
+  font-weight: 600;
+}
+html[lang="ar"] .t-case {
+  line-height: 1.2;
+  font-weight: 600;
+}
+html[lang="ar"] .t-lead {
+  line-height: 1.8;
+}
+html[lang="ar"] .t-eyebrow {
+  font-size: 13px;
+  line-height: 1.4;
+}
+/* Latin micro-labels (9–12px mono) are too small for Arabic glyphs. */
+html[lang="ar"] :is(.text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\], .text-\[11px\], .text-\[11\.5px\], .text-\[12px\]) {
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+/* Headline word masks need room for Arabic descenders and dots. */
+html[lang="ar"] .split-word {
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
+}

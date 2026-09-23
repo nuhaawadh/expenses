@@ -67,7 +67,7 @@ export function MagneticButton({
       <motion.span style={{ x: lx, y: ly }} className="relative inline-flex items-center gap-2.5">
         {children}
         {arrow && (
-          <span aria-hidden className="relative inline-block h-[1em] w-[1em] overflow-hidden">
+          <span aria-hidden className="relative inline-block h-[1em] w-[1em] overflow-hidden rtl:-scale-x-100">
             <span className="absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-full">→</span>
             <span className="absolute inset-0 -translate-x-full transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0">→</span>
           </span>

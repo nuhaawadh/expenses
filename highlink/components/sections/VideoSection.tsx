@@ -4,14 +4,16 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/lib/site";
 import { dur, ease } from "@/lib/motion";
-import { SystemFlow, FLOW_STEPS } from "../SystemFlow";
+import type { Dict } from "@/lib/i18n";
+import { SystemFlow } from "../SystemFlow";
 
 /**
  * Cinematic demonstration frame directly under the hero.
  * With `site.heroVideo.src` set it lazy-loads the real video;
  * otherwise it runs the live system visualization.
  */
-export function VideoSection() {
+export function VideoSection({ t, flow, rtl }: { t: Dict["video"]; flow: Dict["flow"]; rtl: boolean }) {
+  const steps = flow.steps;
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
@@ -21,7 +23,7 @@ export function VideoSection() {
   const hasVideo = Boolean(site.heroVideo.src);
 
   return (
-    <section aria-label="System demonstration" className="relative pb-28 md:pb-44">
+    <section aria-label={t.aria} className="relative pb-28 md:pb-44">
       <div className="frame" style={{ perspective: 1600 }}>
         <motion.div
           ref={ref}
@@ -40,15 +42,15 @@ export function VideoSection() {
               <div className="flex items-center gap-2.5">
                 <span className="animate-blink h-1.5 w-1.5 rounded-full bg-accent" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-mute">
-                  Live system <span className="hidden xs:inline">· HIGHLink OS</span>
+                  {t.live} <span className="hidden xs:inline">{t.liveSuffix}</span>
                 </span>
               </div>
-              <span className="font-mono text-[10px] tabular-nums tracking-[0.15em] text-dim">
-                {hasVideo ? "DEMO" : `STEP 0${step + 1} / 0${FLOW_STEPS.length}`}
+              <span className="font-mono text-[10px] uppercase tabular-nums tracking-[0.15em] text-dim">
+                {hasVideo ? t.demo : `${t.step} 0${step + 1} / 0${steps.length}`}
               </span>
             </div>
 
-            {hasVideo ? <LazyVideo /> : <SystemFlow onStep={setStep} />}
+            {hasVideo ? <LazyVideo /> : <SystemFlow t={flow} rtl={rtl} onStep={setStep} />}
 
             {/* player chrome — bottom */}
             {!hasVideo && (
@@ -61,10 +63,10 @@ export function VideoSection() {
                     transition={{ duration: 0.5, ease }}
                     className="truncate font-mono text-[11px] tracking-[0.04em] text-fg/80"
                   >
-                    <span className="text-accent">›</span> {FLOW_STEPS[step]}
+                    <span className="inline-block text-accent rtl:-scale-x-100">›</span> {steps[step]}
                   </motion.p>
                   <div className="hidden gap-1 sm:flex" aria-hidden>
-                    {FLOW_STEPS.map((_, i) => (
+                    {steps.map((_, i) => (
                       <span
                         key={i}
                         className={`h-[3px] w-6 rounded-full transition-colors duration-500 ${i <= step ? "bg-accent" : "bg-line-2"}`}
@@ -83,7 +85,7 @@ export function VideoSection() {
           transition={{ duration: dur.slow, ease, delay: 2 }}
           className="mx-auto mt-6 max-w-md text-center text-[13px] leading-relaxed text-dim"
         >
-          How HIGHLink turns the way your business already works into one connected AI system.
+          {t.caption}
         </motion.p>
       </div>
     </section>
