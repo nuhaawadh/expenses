@@ -3,9 +3,9 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Full-screen animated wave field (WebGL). Horizontal colour bands drift
- * slowly, bend with value noise, ripple around the cursor, and get a film
- * grain and soft vignette. Colours come from the active theme.
+ * Full-screen animated wave field (WebGL), fixed to the viewport as in the
+ * reference. Horizontal colour bands drift slowly, bend with value noise,
+ * ripple around the cursor, and get a film grain and soft vignette.
  */
 
 const VERT = `attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}`;
@@ -52,6 +52,7 @@ void main(){
     +(warp-.5)*.30;
 
   vec3 col=ramp(band);
+  col=(col-.5)*1.12+.5;
   col*=1.-.22*smoothstep(.4,1.,length(uv-.5)*1.35);
   col+=(grain(gl_FragCoord.xy)-.5)*.07;
   gl_FragColor=vec4(clamp(col,0.,1.),1.);
@@ -60,11 +61,11 @@ void main(){
 type Palette = [string, string, string, string];
 
 /** Bottom → top colour stops per theme. */
-const PALETTES: Record<"dark" | "light", Palette> = {
-  // Near-black top (headline) through a deep teal band to an ink-teal floor.
-  dark: ["#020606", "#08342f", "#136358", "#070b0c"],
-  // Reference-style light field: pale top, saturated middle, deep bottom.
-  light: ["#021a18", "#0d6b5e", "#4fcdb8", "#eefbf8"],
+const PALETTES: Record<"light" | "dark", Palette> = {
+  // Default, as in the reference: pale ice top, sky cyan, ocean blue, deep navy floor.
+  light: ["#031c26", "#1b6ca8", "#5ad2f4", "#eaf9ff"],
+  // Night variant for the footer toggle.
+  dark: ["#010a10", "#07243a", "#0f4f80", "#0a1822"],
 };
 
 const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255) as [number, number, number];
@@ -106,8 +107,8 @@ export function WaveBackground() {
     const stops = [u("c0"), u("c1"), u("c2"), u("c3")];
 
     const applyTheme = () => {
-      const light = document.documentElement.classList.contains("light");
-      PALETTES[light ? "light" : "dark"].forEach((c, i) => gl.uniform3f(stops[i], ...hex(c)));
+      const dark = document.documentElement.classList.contains("dark");
+      PALETTES[dark ? "dark" : "light"].forEach((c, i) => gl.uniform3f(stops[i], ...hex(c)));
       kick();
     };
 
@@ -152,8 +153,10 @@ export function WaveBackground() {
 
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== "mouse" || reduce.matches) return;
-      tx = e.clientX / window.innerWidth;
-      ty = 1 - e.clientY / window.innerHeight;
+      const r = canvas.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      tx = (e.clientX - r.left) / r.width;
+      ty = 1 - (e.clientY - r.top) / r.height;
       if (target === 0 && strength < 0.01) {
         mx = tx;
         my = ty;

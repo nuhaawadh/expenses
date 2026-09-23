@@ -2,13 +2,13 @@
 
 import { MotionConfig } from "framer-motion";
 import { useState } from "react";
-import type { Content } from "@/lib/content";
+import type { Content, Locale } from "@/lib/content";
 import { useBookingUnlock } from "@/lib/useBookingUnlock";
 import { Hero } from "./Hero";
 import { BookingSection } from "./BookingSection";
 
 /** The page's sections. The booking section only exists once it is unlocked. */
-export function VslSections({ t }: { t: Content }) {
+export function VslSections({ t, locale }: { t: Content; locale: Locale }) {
   const { unlocked, unlock } = useBookingUnlock();
   const [progress, setProgress] = useState(0);
 
@@ -22,7 +22,7 @@ export function VslSections({ t }: { t: Content }) {
         onProgress={setProgress}
         onUnlock={unlock}
       />
-      {unlocked && <BookingSection t={t.booking} />}
+      {unlocked && <BookingSection t={t.booking} form={t.form} locale={locale} />}
     </MotionConfig>
   );
 }

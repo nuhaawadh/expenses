@@ -20,9 +20,12 @@ function readUnlocked() {
  * Booking stays locked until the visitor has actually watched
  * `site.unlockAfterSeconds` of the video (or reached the end).
  * Once unlocked it is remembered and synced across tabs.
+ * With no video configured there is nothing to watch, so booking is open.
  */
+const NO_VIDEO = !site.video.src;
+
 export function useBookingUnlock() {
-  const [unlocked, setUnlocked] = useState(false);
+  const [unlocked, setUnlocked] = useState(NO_VIDEO);
 
   useEffect(() => {
     if (readUnlocked()) setUnlocked(true);
@@ -32,7 +35,8 @@ export function useBookingUnlock() {
   }, []);
 
   useEffect(() => {
-    if (!unlocked) return;
+    // Don't remember an unlock that only happened because no video exists yet.
+    if (!unlocked || NO_VIDEO) return;
     for (const s of STORES) {
       try {
         window[s].setItem(site.unlockKey, "1");

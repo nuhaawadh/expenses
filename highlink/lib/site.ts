@@ -12,8 +12,25 @@ export const site = {
   /** Seconds of the video a visitor must watch before booking unlocks (reference: 6 minutes). */
   unlockAfterSeconds: 6 * 60,
 
-  /** Scheduling embed URL (Calendly, Cal.com, GoHighLevel…). Empty shows a placeholder. */
+  /**
+   * Optional third-party scheduling embed (Calendly, Cal.com, GoHighLevel…).
+   * When set it replaces the built-in booking form.
+   */
   bookingUrl: "",
+
+  /**
+   * Built-in booking form. Visitors request a slot; requests are posted to
+   * /api/booking, which forwards them to BOOKING_WEBHOOK_URL (e.g. an n8n webhook).
+   * Times are wall-clock times in `timeZone`.
+   */
+  booking: {
+    timeZone: "Asia/Riyadh",
+    workDays: [0, 1, 2, 3, 4], // Sun–Thu (0 = Sunday)
+    firstSlot: "10:00",
+    lastSlot: "16:30",
+    slotMinutes: 30,
+    daysAhead: 14, // how many working days to offer
+  },
 
   /** Browser-storage key that remembers an unlocked booking across visits and tabs. */
   unlockKey: "highlink:vsl:booking-unlocked",

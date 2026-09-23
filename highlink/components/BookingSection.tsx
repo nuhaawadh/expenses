@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { Content } from "@/lib/content";
+import type { Content, Locale } from "@/lib/content";
 import { site } from "@/lib/site";
+import { BookingForm } from "./BookingForm";
 
-/** Section 02 — appears only after booking unlocks. */
-export function BookingSection({ t }: { t: Content["booking"] }) {
+/** Section 02 — appears once booking unlocks. */
+export function BookingSection({ t, form, locale }: { t: Content["booking"]; form: Content["form"]; locale: Locale }) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 24 }}
@@ -20,7 +21,7 @@ export function BookingSection({ t }: { t: Content["booking"] }) {
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted md:text-base">{t.body}</p>
         </div>
-        <div className="overflow-hidden bg-white">
+        <div className="overflow-hidden rounded-lg bg-white text-black shadow-xl">
           {site.bookingUrl ? (
             <iframe
               title={t.frameTitle}
@@ -29,9 +30,7 @@ export function BookingSection({ t }: { t: Content["booking"] }) {
               className="block min-h-[600px] w-full border-0 md:min-h-[700px]"
             />
           ) : (
-            <div className="grid min-h-[600px] place-items-center p-6 text-center text-sm text-black/70 md:min-h-[700px]">
-              {t.placeholder}
-            </div>
+            <BookingForm t={form} locale={locale} />
           )}
         </div>
       </div>

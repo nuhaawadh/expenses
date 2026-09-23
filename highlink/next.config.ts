@@ -7,7 +7,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: { optimizePackageImports: ["framer-motion"] },
-  ...(preview ? { output: "export" as const, distDir: ".next-preview" } : {}),
+  // The preview is a static export (scripts/export-preview.sh sets the API route aside);
+  // NEXT_PUBLIC_PREVIEW tells the booking form not to submit.
+  ...(preview ? { output: "export" as const, distDir: ".next-preview", env: { NEXT_PUBLIC_PREVIEW: "1" } } : {}),
 };
 
 export default nextConfig;

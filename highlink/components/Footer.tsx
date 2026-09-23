@@ -7,10 +7,11 @@ export function Footer({ locale }: { locale: Locale }) {
   const t = content[locale].footer;
   const p = paths[locale];
   const alt = other(locale);
-  const link = "text-fg underline underline-offset-2 transition-colors hover:text-progress";
+  const link = "text-fg underline underline-offset-2 transition-colors hover:text-white/70";
 
   return (
-    <footer className="relative z-10">
+    // A soft navy scrim keeps the white copy readable wherever the fixed wave field is.
+    <footer className="on-deep relative z-10 bg-gradient-to-b from-[#031c26]/35 via-[#031c26]/65 to-[#031c26]/90">
       <div className="mx-auto max-w-4xl px-4 py-8 md:py-12">
         <div className="mb-5 md:mb-7">
           <a href={p.home} className="inline-block text-[28px] md:text-[34px]" aria-label={t.logoAlt}>

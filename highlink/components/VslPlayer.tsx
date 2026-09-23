@@ -45,7 +45,7 @@ function Veil({ children }: { children: React.ReactNode }) {
 
 function Placeholder({ t }: { t: Content["video"] }) {
   return (
-    <div role="img" aria-label={t.label} className="absolute inset-0 bg-[radial-gradient(60%_80%_at_50%_50%,#0b2b27,#000)]">
+    <div role="img" aria-label={t.label} className="absolute inset-0 bg-[radial-gradient(60%_80%_at_50%_50%,#0d2a6b,#000)]">
       <Veil>
         <SpeakerIcon className="h-8 w-8 sm:h-14 sm:w-14" />
         <span className="text-base font-bold leading-snug sm:text-[28px]">{t.placeholder}</span>
@@ -132,7 +132,7 @@ function VideoPlayer({ t, onProgress, onUnlock }: Props) {
       {unmuted && !failed && (
         <div
           dir="ltr"
-          className={`absolute inset-x-0 bottom-0 z-10 flex items-center gap-1 bg-cta/85 px-2 text-white transition-opacity duration-300 ${
+          className={`absolute inset-x-0 bottom-0 z-10 flex items-center gap-1 bg-progress/80 px-2 text-white transition-opacity duration-300 ${
             playing ? "opacity-0 hover:opacity-100 focus-within:opacity-100" : "opacity-100"
           }`}
         >

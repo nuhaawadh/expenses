@@ -41,7 +41,7 @@ export function Hero({ t, video, unlocked, progress, onProgress, onUnlock }: Pro
           </div>
         </div>
 
-        <p className="mb-2 text-xs md:text-sm">{t.caption}</p>
+        <p className="mb-2 text-xs text-white md:text-sm">{t.caption}</p>
 
         <div className="mt-6 flex flex-col items-center gap-3">
           <button
@@ -74,7 +74,7 @@ export function Hero({ t, video, unlocked, progress, onProgress, onUnlock }: Pro
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.25 }}
-              className="text-sm"
+              className="text-sm text-white"
             >
               {unlocked ? t.unlocked : t.locked}
             </motion.p>
