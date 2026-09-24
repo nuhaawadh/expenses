@@ -106,6 +106,7 @@
       <span><kbd>Space</kbd></span><span>Jump — press again in the air to double jump</span>
       <span><kbd>Mouse</kbd></span><span>Rotate camera (<kbd>Q</kbd>/<kbd>E</kbd> too), wheel to zoom</span>
       <span><kbd>M</kbd></span><span>Mute sound</span>
+      <span><kbd>🎮</kbd></span><span>Controller: left stick move, right stick look, ✕ jump, R2 run</span>
       <span><kbd>Touch</kbd></span><span>Left thumb moves, swipe right side to look, tap JUMP (twice to double jump)</span>
     </div>
     <p style="font-size:14px;margin-top:-6px">Bonk <b>?</b> blocks from below · stomp the grumblebugs · ride the platforms</p>
@@ -1161,6 +1162,7 @@ const game = { state: 'title', coins: 0, stars: 0, lives: 3, time: 0, checkpoint
 const cam = { yaw: 0, pitch: 0.38, dist: 9, curDist: 9, target: new V3() };
 const keys = {};
 const touch = { x: 0, y: 0, stickId: null, camId: null, ox: 0, oy: 0, lx: 0, ly: 0, used: false };
+const pad = { x: 0, y: 0, jumpHeld: false, run: false, prev: [], connected: false };
 const isTouch = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window;
 
 const $ = id => document.getElementById(id);
@@ -1292,12 +1294,12 @@ function updatePlayer(dt) {
   if (keyDown('KeyS', 'ArrowDown')) iz += 1;
   if (keyDown('KeyA', 'ArrowLeft')) ix -= 1;
   if (keyDown('KeyD', 'ArrowRight')) ix += 1;
-  ix += touch.x; iz += touch.y;
+  ix += touch.x + pad.x; iz += touch.y + pad.y;
   const fx = -Math.sin(cam.yaw), fz = -Math.cos(cam.yaw), rx = Math.cos(cam.yaw), rz = -Math.sin(cam.yaw);
   let wx = rx * ix - fx * iz, wz = rz * ix - fz * iz;
   const wl = Math.hypot(wx, wz);
   if (wl > 1) { wx /= wl; wz /= wl; }
-  const maxS = keyDown('ShiftLeft', 'ShiftRight') ? 10 : 7;
+  const maxS = keyDown('ShiftLeft', 'ShiftRight') || pad.run ? 10 : 7;
   if (P.knock > 0) P.knock -= dt;
   else {
     const ctrl = P.onGround ? 14 : 5;
@@ -1323,7 +1325,7 @@ function updatePlayer(dt) {
     }
   }
   let g = GRAVITY;
-  if (P.vel.y > 0 && !keys.Space) g *= 2.1;   // short hop when jump is released early
+  if (P.vel.y > 0 && !keys.Space && !pad.jumpHeld) g *= 2.1;   // short hop when jump is released early
   P.vel.y = Math.max(P.vel.y - g * dt, -32);
 
   // ride moving platforms
@@ -1373,7 +1375,7 @@ function updateEnemies(dt, t) {
     if (Math.hypot(dx, dz) < 0.95 && P.pos.y < e.pos.y + 1.05 && P.pos.y + P.height > e.pos.y) {
       if (P.vel.y < 0 && P.pos.y > e.pos.y + 0.35) {
         defeatEnemy(e);
-        P.vel.y = keys.Space ? 13 : 10; P.jumps = 1; P.onGround = false;
+        P.vel.y = keys.Space || pad.jumpHeld ? 13 : 10; P.jumps = 1; P.onGround = false;
         hero.squashVel += 6;
       } else hurtPlayer(e.pos);
     }
@@ -1642,8 +1644,36 @@ addEventListener('resize', () => {
    ===================================================================== */
 const clock = new THREE.Clock();
 let time = 0;
+// ---------- game controller (PlayStation / Xbox, standard mapping) ----------
+function pollGamepad(dt) {
+  const list = navigator.getGamepads ? navigator.getGamepads() : [];
+  let gp = null;
+  for (const g of list) if (g && g.connected) { gp = g; break; }
+  if (!gp) { pad.x = pad.y = 0; pad.jumpHeld = pad.run = false; return; }
+  const dz = v => Math.abs(v) < 0.18 ? 0 : (v - Math.sign(v) * 0.18) / 0.82;
+  const btn = i => !!(gp.buttons[i] && gp.buttons[i].pressed);
+  const pressed = i => btn(i) && !pad.prev[i];
+  pad.x = dz(gp.axes[0] || 0) + (btn(15) ? 1 : 0) - (btn(14) ? 1 : 0);
+  pad.y = dz(gp.axes[1] || 0) + (btn(13) ? 1 : 0) - (btn(12) ? 1 : 0);
+  cam.yaw -= dz(gp.axes[2] || 0) * 2.6 * dt;
+  cam.pitch = clamp(cam.pitch + dz(gp.axes[3] || 0) * 1.8 * dt, -0.15, 1.25);
+  if (btn(4)) cam.yaw += 2.2 * dt;   // L1
+  if (btn(5)) cam.yaw -= 2.2 * dt;   // R1
+  pad.run = btn(7) || btn(2);        // R2 or Square
+  pad.jumpHeld = btn(0);             // Cross
+  if (pressed(0)) {
+    if (game.state === 'playing') player.jumpBuf = 0.14;
+    else if (!$('titleScreen').classList.contains('hidden') || game.state === 'won' || game.state === 'over') startGame();
+  }
+  if (pressed(9) && game.state !== 'playing') startGame(); // Options
+  pad.prev = gp.buttons.map(b => b.pressed);
+}
+addEventListener('gamepadconnected', () => { pad.connected = true; toast('🎮 Controller connected!'); });
+addEventListener('gamepaddisconnected', () => { pad.connected = false; toast('Controller disconnected'); });
+
 function update(dt) {
   time += dt;
+  pollGamepad(dt);
   updateMovers(time);
   if (game.state === 'playing') {
     game.time += dt;
