@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 /*
+ * هوية اللون: أخضر العلم السعودي #006C35 مع الأبيض.
+ * الأخضر هو نفسه لون الدخل — مال داخل = أخضر — والأحمر للصرف والرصيد
+ * السالب، فتبقى الدلالة المحاسبية مقروءة بلا لون ثالث يزاحم الهوية.
+ *
  * الألوان تُعرَّف كمتغيّرات CSS عادية حتى يمكن تبديلها في الوضع الداكن،
  * ثم يشير إليها `@theme inline` فتصير أدوات Tailwind (bg-canvas…).
  * `inline` ضرورية: بدونها تُثبَّت القيمة وقت البناء ولا يعمل التبديل.
@@ -8,32 +12,34 @@
  */
 
 :root {
-  --c-canvas: #faf9f7;
+  --c-canvas: #f5f8f6;
   --c-surface: #ffffff;
-  --c-line: #e7e3dd;
-  --c-line-soft: #f0ece6;
-  --c-ink: #1a1714;
-  --c-muted: #7b736a;
-  --c-faint: #a8a096;
-  --c-accent: #9a5b12;
-  --c-accent-soft: #f6efe4;
+  --c-line: #dde7e1;
+  --c-line-soft: #eef3f0;
+  --c-ink: #0f1c15;
+  --c-muted: #5b6f64;
+  --c-faint: #91a399;
+  --c-accent: #006c35;
+  --c-accent-soft: #e5f1ea;
   --c-expense: #9d2235;
-  --c-income: #1f6b3f;
+  --c-income: #006c35;
+  --c-on-accent: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --c-canvas: #14120f;
-    --c-surface: #1c1916;
-    --c-line: #2e2a25;
-    --c-line-soft: #241f1b;
-    --c-ink: #f2ede6;
-    --c-muted: #a29a90;
-    --c-faint: #766e65;
-    --c-accent: #d99a4e;
-    --c-accent-soft: #2a2119;
-    --c-expense: #e2788a;
-    --c-income: #6cc08c;
+    --c-canvas: #0a130d;
+    --c-surface: #111c15;
+    --c-line: #203029;
+    --c-line-soft: #16231b;
+    --c-ink: #e8f0ea;
+    --c-muted: #93a89b;
+    --c-faint: #5f7569;
+    --c-accent: #4eb985;
+    --c-accent-soft: #13251b;
+    --c-expense: #e58094;
+    --c-income: #4eb985;
+    --c-on-accent: #05120a;
   }
 }
 
@@ -49,6 +55,7 @@
   --color-accent-soft: var(--c-accent-soft);
   --color-expense: var(--c-expense);
   --color-income: var(--c-income);
+  --color-on-accent: var(--c-on-accent);
 }
 
 html {

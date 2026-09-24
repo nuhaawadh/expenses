@@ -22,6 +22,20 @@ const dayLong = new Intl.DateTimeFormat(LOCALE_DATE, {
   timeZone: TZ,
 });
 
+const monthLong = new Intl.DateTimeFormat(LOCALE_DATE, {
+  month: "long",
+  year: "numeric",
+  timeZone: TZ,
+});
+
+const dateTimeShort = new Intl.DateTimeFormat(LOCALE_DATE, {
+  day: "numeric",
+  month: "short",
+  hour: "numeric",
+  minute: "2-digit",
+  timeZone: TZ,
+});
+
 /** يحوّل `YYYY-MM-DD` إلى "اليوم" / "أمس" / "الأحد 14 سبتمبر" */
 export function formatDayLabel(isoDate: string | null): string {
   if (!isoDate) return "بلا تاريخ";
@@ -34,6 +48,18 @@ export function formatDayLabel(isoDate: string | null): string {
   return dayLong.format(new Date(`${isoDate}T12:00:00Z`));
 }
 
+/** يحوّل `YYYY-MM` إلى "سبتمبر 2026" */
+export function formatMonthLabel(month: string): string {
+  if (!/^\d{4}-\d{2}$/.test(month)) return month;
+  return monthLong.format(new Date(`${month}-15T12:00:00Z`));
+}
+
+export function formatStamp(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? "" : dateTimeShort.format(d);
+}
+
 /** تاريخ اليوم بتوقيت الرياض بصيغة YYYY-MM-DD */
 export function todayKey(): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -42,6 +68,10 @@ export function todayKey(): string {
     month: "2-digit",
     day: "2-digit",
   }).format(new Date());
+}
+
+export function currentMonthKey(): string {
+  return todayKey().slice(0, 7);
 }
 
 function shiftKey(key: string, days: number): string {

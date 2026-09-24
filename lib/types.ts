@@ -1,16 +1,42 @@
 export type Direction = "expense" | "income";
 
+export const CATEGORIES = [
+  "مواد خام",
+  "رواتب",
+  "نقل",
+  "إيجار",
+  "مرافق",
+  "تسويق",
+  "معدات",
+  "صيانة",
+  "ضيافة",
+  "رسوم",
+  "مبيعات",
+  "أخرى",
+] as const;
+
+export type Category = (typeof CATEGORIES)[number];
+
 export interface Entry {
   id: number;
   /** YYYY-MM-DD بتوقيت الرياض — جاهز للعرض مباشرة */
   spent_at: string | null;
   amount: number;
+  vat_amount: number;
   currency: string;
   direction: Direction;
   category: string;
   vendor: string;
+  tax_number: string;
+  invoice_number: string;
   note: string;
   raw_text: string;
+  source: "text" | "receipt";
+  receipt_url: string;
+  deleted: boolean;
+  deleted_at: string | null;
+  delete_reason: string;
+  edited_at: string | null;
   created_at: string | null;
 }
 
@@ -25,23 +51,45 @@ export interface Totals {
   income_month: number;
   net_month: number;
   count: number;
+  vat_month: number;
+  /** الرصيد التراكمي لكل الحركات حتى نهاية الشهر المعروض */
+  balance: number;
+  prev: { expense: number; income: number; net: number };
+  /** نسبة التغيّر عن الشهر السابق، وnull حين لا يوجد شهر سابق للمقارنة */
+  change: { expense: number | null; income: number | null };
   by_category: CategoryTotal[];
 }
 
-export interface ListData {
+export interface LedgerData {
+  month: string;
+  months: string[];
   currency: string;
   entries: Entry[];
+  deleted_entries: Entry[];
   totals: Totals;
 }
 
 export interface AddData {
-  entry: Entry;
+  entry: Entry & { receipt_saved?: boolean };
 }
 
-/**
- * شكل الرد الموحّد من العقد. `success` هو الفيصل — وليس رمز HTTP،
- * لأن فشل التحليل خطأ مستخدم يُعرض كما هو.
- */
+export interface MutateData {
+  id: number;
+  updated?: boolean;
+  deleted?: boolean;
+}
+
+/** شكل الرد الموحّد. `success` هو الفيصل، لا رمز HTTP. */
 export type ApiResult<T> =
   | { success: true; data: T; error: null }
   | { success: false; data: null; error: string };
+
+export interface EntryPatch {
+  amount?: number;
+  vat_amount?: number;
+  direction?: Direction;
+  category?: string;
+  spent_at?: string;
+  vendor?: string;
+  note?: string;
+}

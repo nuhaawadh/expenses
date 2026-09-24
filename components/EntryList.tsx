@@ -1,40 +1,80 @@
-import { formatAmount, groupByDay } from "@/lib/format";
+"use client";
+
+import { useState } from "react";
+import { formatAmount, formatStamp, groupByDay } from "@/lib/format";
 import type { Entry } from "@/lib/types";
 
-function Row({ entry, isNew }: { entry: Entry; isNew: boolean }) {
+function Amount({ entry }: { entry: Entry }) {
   const income = entry.direction === "income";
-  const title = entry.note || entry.vendor || entry.raw_text;
+  return (
+    // dir="ltr" ضروري: علامة +/− محايدة اتجاهياً، وبدونها يعيد RTL ترتيبها فتظهر بعد الرقم
+    <p
+      dir="ltr"
+      className={`tnum shrink-0 text-[15px] font-medium ${income ? "text-income" : "text-ink"}`}
+    >
+      {income ? "+" : "−"}
+      {formatAmount(entry.amount)}
+    </p>
+  );
+}
+
+function Row({
+  entry,
+  isNew,
+  onOpen,
+}: {
+  entry: Entry;
+  isNew: boolean;
+  onOpen: (entry: Entry) => void;
+}) {
+  const title = entry.note || entry.vendor || entry.raw_text || "حركة";
+  const meta = [entry.category, entry.vendor && entry.vendor !== title ? entry.vendor : null]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <li
-      className={`flex items-baseline gap-3 px-4 py-3 ${isNew ? "rise" : ""}`}
-    >
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-[15px] text-ink">{title}</p>
-        <p className="mt-0.5 truncate text-[12.5px] text-faint">
-          {entry.category}
-          {entry.vendor && entry.vendor !== title ? ` · ${entry.vendor}` : ""}
-        </p>
-      </div>
-      {/* dir="ltr" ضروري: علامة +/− محايدة اتجاهياً، وبدونها يعيد RTL ترتيبها فتظهر بعد الرقم */}
-      <p
-        dir="ltr"
-        className={`tnum shrink-0 text-[15px] font-medium ${income ? "text-income" : "text-ink"}`}
+    <li className={isNew ? "rise" : undefined}>
+      <button
+        type="button"
+        onClick={() => onOpen(entry)}
+        className="flex w-full items-baseline gap-3 px-4 py-3 text-start transition-colors hover:bg-line-soft"
       >
-        {income ? "+" : "−"}
-        {formatAmount(entry.amount)}
-      </p>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[15px] text-ink">
+            {title}
+            {entry.source === "receipt" ? (
+              <span
+                className="ms-1.5 align-middle text-[11px] text-accent"
+                title="مسجّلة من فاتورة"
+              >
+                ⬚
+              </span>
+            ) : null}
+          </p>
+          <p className="mt-0.5 truncate text-[12.5px] text-faint">
+            {meta}
+            {entry.vat_amount > 0 ? ` · ضريبة ${formatAmount(entry.vat_amount)}` : ""}
+            {entry.edited_at ? " · معدّلة" : ""}
+          </p>
+        </div>
+        <Amount entry={entry} />
+      </button>
     </li>
   );
 }
 
 export function EntryList({
   entries,
+  deleted,
   newestId,
+  onOpen,
 }: {
   entries: Entry[];
+  deleted: Entry[];
   newestId: number | null;
+  onOpen: (entry: Entry) => void;
 }) {
+  const [showDeleted, setShowDeleted] = useState(false);
   const groups = groupByDay(entries);
 
   return (
@@ -61,12 +101,47 @@ export function EntryList({
                   key={entry.id}
                   entry={entry}
                   isNew={entry.id === newestId}
+                  onOpen={onOpen}
                 />
               ))}
             </ul>
           </div>
         );
       })}
+
+      {deleted.length > 0 ? (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowDeleted((v) => !v)}
+            className="flex w-full items-baseline justify-between px-1 py-1 text-[13px] text-muted"
+          >
+            <span>محذوفة ({deleted.length})</span>
+            <span className="text-faint">{showDeleted ? "إخفاء" : "عرض"}</span>
+          </button>
+
+          {showDeleted ? (
+            <ul className="mt-2 divide-y divide-line-soft overflow-hidden rounded-xl border border-dashed border-line">
+              {deleted.map((entry) => (
+                <li key={entry.id} className="px-4 py-3">
+                  <div className="flex items-baseline gap-3">
+                    <p className="min-w-0 flex-1 truncate text-[14px] text-muted line-through">
+                      {entry.note || entry.vendor || entry.raw_text}
+                    </p>
+                    <p dir="ltr" className="tnum shrink-0 text-[14px] text-faint line-through">
+                      {formatAmount(entry.amount)}
+                    </p>
+                  </div>
+                  <p className="mt-1 text-[12px] text-faint">
+                    {entry.delete_reason}
+                    {entry.deleted_at ? ` — ${formatStamp(entry.deleted_at)}` : ""}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
     </section>
   );
 }

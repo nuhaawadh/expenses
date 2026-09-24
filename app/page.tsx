@@ -1,9 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Composer } from "@/components/Composer";
+import { EntryEditor } from "@/components/EntryEditor";
 import { EntryList } from "@/components/EntryList";
 import { Summary } from "@/components/Summary";
-import type { AddData, ApiResult, Entry, ListData, Totals } from "@/lib/types";
+import { currentMonthKey, formatMonthLabel } from "@/lib/format";
+import { prepareReceipt } from "@/lib/image";
+import type {
+  AddData,
+  ApiResult,
+  Entry,
+  EntryPatch,
+  LedgerData,
+  MutateData,
+  Totals,
+} from "@/lib/types";
 
 const EMPTY_TOTALS: Totals = {
   today: 0,
@@ -11,6 +23,10 @@ const EMPTY_TOTALS: Totals = {
   income_month: 0,
   net_month: 0,
   count: 0,
+  vat_month: 0,
+  balance: 0,
+  prev: { expense: 0, income: 0, net: 0 },
+  change: { expense: null, income: null },
   by_category: [],
 };
 
@@ -38,22 +54,29 @@ async function call<T>(body: unknown): Promise<ApiResult<T>> {
 }
 
 export default function Page() {
+  const [month, setMonth] = useState(currentMonthKey());
+  const [months, setMonths] = useState<string[]>([]);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [deleted, setDeleted] = useState<Entry[]>([]);
   const [totals, setTotals] = useState<Totals>(EMPTY_TOTALS);
+
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [stage, setStage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [newestId, setNewestId] = useState<number | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [editing, setEditing] = useState<Entry | null>(null);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (which: string) => {
     setLoading(true);
-    const result = await call<ListData>({ action: "list" });
+    const result = await call<LedgerData>({ action: "list", month: which });
     if (result.success) {
       setEntries(result.data.entries);
+      setDeleted(result.data.deleted_entries);
       setTotals(result.data.totals);
+      setMonths(result.data.months);
       setLoadFailed(false);
     } else {
       setLoadFailed(true);
@@ -63,64 +86,110 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    void refresh(month);
+  }, [refresh, month]);
 
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    const value = text.trim();
-    if (!value || saving) return;
-
-    setSaving(true);
-    setError(null);
-
-    const result = await call<AddData>({ action: "add", text: value });
-
+  /** كل تغيير يعيد القراءة بدل تحديث الحالة محلياً، فتبقى الحسابات في مكان واحد */
+  async function after(result: ApiResult<unknown>, onOk?: () => void) {
     if (result.success) {
-      setText("");
-      setNewestId(result.data.entry.id);
-      // نعيد القراءة بدل الحقن محلياً حتى تبقى الإجماليات محسوبة في مكان واحد
-      await refresh();
+      setError(null);
+      onOk?.();
+      await refresh(month);
     } else {
       setError(result.error);
     }
-
-    setSaving(false);
-    inputRef.current?.focus();
   }
 
-  const isEmpty = !loading && !loadFailed && entries.length === 0;
+  async function addText(text: string) {
+    setBusy(true);
+    setStage("يقرأ الجملة…");
+    setError(null);
+    setNotice(null);
+
+    const result = await call<AddData>({ action: "add", text });
+    await after(result, () => {
+      if (result.success) setNewestId(result.data.entry.id);
+    });
+
+    setBusy(false);
+    setStage(null);
+  }
+
+  async function addReceipt(file: File) {
+    setBusy(true);
+    setError(null);
+    setNotice(null);
+
+    try {
+      setStage("يجهّز الصورة…");
+      const image = await prepareReceipt(file);
+
+      setStage("يقرأ الفاتورة… قد يأخذ لحظات");
+      const result = await call<AddData>({
+        action: "add_receipt",
+        imageBase64: image.base64,
+        mimeType: image.mimeType,
+      });
+
+      await after(result, () => {
+        if (!result.success) return;
+        setNewestId(result.data.entry.id);
+        if (result.data.entry.receipt_saved === false) {
+          setNotice("سُجّلت البيانات، لكن الصورة ما انحفظت في درايف.");
+        }
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "تعذّرت قراءة الصورة.");
+    }
+
+    setBusy(false);
+    setStage(null);
+  }
+
+  async function saveEdit(patch: EntryPatch) {
+    if (!editing) return;
+    setBusy(true);
+    const result = await call<MutateData>({ action: "update", id: editing.id, patch });
+    await after(result, () => setEditing(null));
+    setBusy(false);
+  }
+
+  async function removeEntry(reason: string) {
+    if (!editing) return;
+    setBusy(true);
+    const result = await call<MutateData>({ action: "delete", id: editing.id, reason });
+    await after(result, () => setEditing(null));
+    setBusy(false);
+  }
+
+  const isEmpty = !loading && !loadFailed && entries.length === 0 && deleted.length === 0;
+  const monthOptions = months.includes(month) ? months : [month, ...months];
 
   return (
     <main className="mx-auto min-h-dvh w-full max-w-2xl px-4 pb-24 pt-8 sm:px-6">
-      <header className="mb-7 flex items-baseline justify-between">
+      <header className="mb-6 flex items-center justify-between gap-3">
         <h1 className="text-lg font-semibold tracking-tight">الدفتر</h1>
-        {totals.count > 0 ? (
-          <p className="tnum text-[13px] text-faint">{totals.count} حركة</p>
-        ) : null}
+        <select
+          value={month}
+          onChange={(e) => setMonth(e.target.value)}
+          aria-label="اختر الشهر"
+          className="rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[13px] text-ink outline-none focus:border-accent"
+        >
+          {monthOptions.map((m) => (
+            <option key={m} value={m}>
+              {formatMonthLabel(m)}
+            </option>
+          ))}
+        </select>
       </header>
 
-      <form onSubmit={submit} className="mb-8">
-        <div className="flex items-center gap-2 rounded-xl border border-line bg-surface p-1.5 focus-within:border-accent">
-          <input
-            ref={inputRef}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            disabled={saving}
-            maxLength={500}
-            autoComplete="off"
-            placeholder="اكتب حركة… مثال: صرفت 20 ريال عند المصنع"
-            aria-label="حركة جديدة"
-            className="w-full bg-transparent px-2.5 py-2 text-[15px] outline-none placeholder:text-faint disabled:opacity-60"
-          />
-          <button
-            type="submit"
-            disabled={saving || text.trim().length === 0}
-            className="shrink-0 rounded-lg bg-ink px-4 py-2 text-[14px] font-medium text-canvas transition-opacity disabled:opacity-35"
-          >
-            {saving ? "يسجّل…" : "سجّل"}
-          </button>
-        </div>
+      <div className="mb-7">
+        <Composer
+          busy={busy}
+          stage={stage}
+          onSubmitText={addText}
+          onSubmitReceipt={addReceipt}
+        />
 
         {error ? (
           <p
@@ -130,22 +199,29 @@ export default function Page() {
             {error}
           </p>
         ) : null}
-      </form>
+
+        {notice ? (
+          <p className="mt-2.5 rounded-lg border border-line px-3 py-2 text-[13px] text-muted">
+            {notice}
+          </p>
+        ) : null}
+      </div>
 
       {loading ? (
         <div className="space-y-3" aria-busy="true" aria-label="جارٍ التحميل">
+          <div className="h-[104px] rounded-xl bg-line-soft" />
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-[76px] rounded-xl bg-line-soft" />
+              <div key={i} className="h-[72px] rounded-xl bg-line-soft" />
             ))}
           </div>
           <div className="h-40 rounded-xl bg-line-soft" />
         </div>
       ) : loadFailed ? (
         <div className="rounded-xl border border-line bg-surface px-5 py-10 text-center">
-          <p className="text-[15px] text-ink">تعذّر تحميل الحركات</p>
+          <p className="text-[15px] text-ink">تعذّر تحميل الدفتر</p>
           <button
-            onClick={() => void refresh()}
+            onClick={() => void refresh(month)}
             className="mt-3 rounded-lg border border-line px-4 py-1.5 text-[14px] text-muted"
           >
             إعادة المحاولة
@@ -153,19 +229,18 @@ export default function Page() {
         </div>
       ) : isEmpty ? (
         <div className="rounded-xl border border-dashed border-line px-5 py-12 text-center">
-          <p className="text-[15px] text-ink">ابدأ بأول حركة</p>
+          <p className="text-[15px] text-ink">
+            ما فيه حركات في {formatMonthLabel(month)}
+          </p>
           <p className="mx-auto mt-1.5 max-w-sm text-[13.5px] leading-relaxed text-muted">
-            اكتبها بالعربي كما تقولها، والباقي يُستخرج تلقائياً.
+            اكتب الحركة بالعربي كما تقولها، أو صوّر الفاتورة وخلّها تُقرأ تلقائياً.
           </p>
           <ul className="mt-5 flex flex-wrap justify-center gap-2">
             {EXAMPLES.map((example) => (
               <li key={example}>
                 <button
                   type="button"
-                  onClick={() => {
-                    setText(example);
-                    inputRef.current?.focus();
-                  }}
+                  onClick={() => void addText(example)}
                   className="rounded-full border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   {example}
@@ -176,10 +251,25 @@ export default function Page() {
         </div>
       ) : (
         <div className="space-y-8">
-          <Summary totals={totals} />
-          <EntryList entries={entries} newestId={newestId} />
+          <Summary totals={totals} month={month} />
+          <EntryList
+            entries={entries}
+            deleted={deleted}
+            newestId={newestId}
+            onOpen={setEditing}
+          />
         </div>
       )}
+
+      {editing ? (
+        <EntryEditor
+          entry={editing}
+          busy={busy}
+          onSave={saveEdit}
+          onDelete={removeEntry}
+          onClose={() => setEditing(null)}
+        />
+      ) : null}
     </main>
   );
 }
