@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
+import { getSession } from "@/lib/session";
 
 /**
  * البوابة الخادمية. هذا هو المكان الوحيد الذي يعرف رابط n8n والسر المشترك.
  * المتصفح لا يرى أياً منهما — ولذلك لا يحملان بادئة NEXT_PUBLIC_.
+ *
+ * وهي أيضاً المكان الوحيد الذي يحدّد صاحب الطلب: معرّف المستخدم يُؤخذ من
+ * الجلسة الموقّعة، ولا يُقبل من جسم الطلب مهما أرسل المتصفح. لو قُبل منه،
+ * لصار أي مستخدم يقرأ دفتر غيره بتغيير رقم واحد.
  */
 
 export const runtime = "nodejs";
@@ -63,6 +68,11 @@ function buildPayload(body: Record<string, unknown>): { payload: object } | { er
 }
 
 export async function POST(request: Request) {
+  const session = await getSession();
+  if (!session) {
+    return fail("جلستك انتهت. سجّل دخولك مرة أخرى.", 401);
+  }
+
   const webhookUrl = process.env.N8N_WEBHOOK_URL;
   const secret = process.env.N8N_SHARED_SECRET;
 
@@ -99,7 +109,8 @@ export async function POST(request: Request) {
         "Content-Type": "application/json; charset=utf-8",
         "x-app-secret": secret,
       },
-      body: JSON.stringify(built.payload),
+      // user_id يُضاف هنا من الجلسة — آخر نقطة قبل n8n، وبعد أي شيء أرسله المتصفح
+      body: JSON.stringify({ ...built.payload, user_id: session.sub }),
       signal: controller.signal,
       cache: "no-store",
     });

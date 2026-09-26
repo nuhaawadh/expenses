@@ -45,8 +45,6 @@ function Tile({
 }
 
 export function Summary({ totals, month }: { totals: Totals; month: string }) {
-  const top = totals.by_category.slice(0, 5);
-  const largest = top[0]?.amount ?? 0;
   const negative = totals.balance < 0;
 
   return (
@@ -93,32 +91,6 @@ export function Summary({ totals, month }: { totals: Totals; month: string }) {
           }
         />
       </div>
-
-      {top.length > 0 ? (
-        <div className="rounded-xl border border-line bg-surface px-4 py-4">
-          <h2 className="text-[12.5px] text-muted">أعلى التصنيفات</h2>
-          <ul className="mt-3 space-y-2.5">
-            {top.map((row) => (
-              <li key={row.category} className="flex items-center gap-3">
-                <span className="w-[72px] shrink-0 truncate text-[13px] text-ink">
-                  {row.category}
-                </span>
-                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-line-soft">
-                  <span
-                    className="block h-full rounded-full bg-accent"
-                    style={{
-                      width: `${largest > 0 ? Math.max(4, (row.amount / largest) * 100) : 0}%`,
-                    }}
-                  />
-                </span>
-                <span className="tnum w-20 shrink-0 text-end text-[13px] text-muted">
-                  {formatAmount(row.amount)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
     </section>
   );
 }

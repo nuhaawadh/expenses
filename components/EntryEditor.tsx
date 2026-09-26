@@ -201,11 +201,10 @@ export function EntryEditor({
           </div>
         ) : null}
 
-        {entry.edited_at ? (
-          <p className="mt-3 text-[12px] text-faint">
-            آخر تعديل: {formatStamp(entry.edited_at)}
-          </p>
-        ) : null}
+        <div className="mt-3 space-y-0.5 text-[12px] text-faint">
+          {entry.created_at ? <p>تاريخ التسجيل: {formatStamp(entry.created_at)}</p> : null}
+          {entry.edited_at ? <p>آخر تعديل: {formatStamp(entry.edited_at)}</p> : null}
+        </div>
 
         {confirming ? (
           <div className="mt-5 rounded-lg border border-expense/40 bg-canvas p-3">

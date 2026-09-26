@@ -57,7 +57,10 @@ export interface Totals {
   prev: { expense: number; income: number; net: number };
   /** نسبة التغيّر عن الشهر السابق، وnull حين لا يوجد شهر سابق للمقارنة */
   change: { expense: number | null; income: number | null };
+  /** المصروف حسب الفئة للشهر المعروض، تنازلياً */
   by_category: CategoryTotal[];
+  /** الدخل حسب الفئة للشهر المعروض، تنازلياً */
+  income_by_category: CategoryTotal[];
 }
 
 export interface LedgerData {

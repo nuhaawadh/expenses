@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatAmount, formatStamp, groupByDay } from "@/lib/format";
+import { formatAmount, formatRecorded, formatStamp, groupByDay } from "@/lib/format";
 import type { Entry } from "@/lib/types";
 
 function Amount({ entry }: { entry: Entry }) {
@@ -28,7 +28,11 @@ function Row({
   onOpen: (entry: Entry) => void;
 }) {
   const title = entry.note || entry.vendor || entry.raw_text || "حركة";
-  const meta = [entry.category, entry.vendor && entry.vendor !== title ? entry.vendor : null]
+  const meta = [
+    entry.category,
+    entry.vendor && entry.vendor !== title ? entry.vendor : null,
+    formatRecorded(entry.created_at, entry.spent_at) || null,
+  ]
     .filter(Boolean)
     .join(" · ");
 

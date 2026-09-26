@@ -60,6 +60,43 @@ export function formatStamp(iso: string | null): string {
   return Number.isNaN(d.getTime()) ? "" : dateTimeShort.format(d);
 }
 
+const timeOnly = new Intl.DateTimeFormat(LOCALE_DATE, {
+  hour: "numeric",
+  minute: "2-digit",
+  timeZone: TZ,
+});
+
+const dayShort = new Intl.DateTimeFormat(LOCALE_DATE, {
+  day: "numeric",
+  month: "short",
+  timeZone: TZ,
+});
+
+/**
+ * وقت تسجيل الحركة، مختصراً.
+ * إن سُجّلت في يوم غير يوم الحركة نفسها نُظهر التاريخ لا الساعة — لأن
+ * الفارق بين «متى صُرف» و«متى سُجّل» هو المعلومة المفيدة حينها.
+ */
+export function formatRecorded(
+  createdAt: string | null,
+  spentAt: string | null,
+): string {
+  if (!createdAt) return "";
+  const d = new Date(createdAt);
+  if (Number.isNaN(d.getTime())) return "";
+
+  const recordedDay = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+
+  return recordedDay === spentAt
+    ? timeOnly.format(d)
+    : `سُجّلت ${dayShort.format(d)}`;
+}
+
 /** تاريخ اليوم بتوقيت الرياض بصيغة YYYY-MM-DD */
 export function todayKey(): string {
   return new Intl.DateTimeFormat("en-CA", {
