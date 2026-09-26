@@ -5,11 +5,13 @@ import { Breakdown } from "@/components/Breakdown";
 import { Composer } from "@/components/Composer";
 import { EntryEditor } from "@/components/EntryEditor";
 import { EntryList } from "@/components/EntryList";
+import { PlanBanner } from "@/components/PlanBanner";
 import { Summary } from "@/components/Summary";
 import { currentMonthKey, formatMonthLabel } from "@/lib/format";
 import { prepareReceipt } from "@/lib/image";
 import type {
   AddData,
+  Plan,
   ApiResult,
   Entry,
   EntryPatch,
@@ -78,6 +80,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
   const [newestId, setNewestId] = useState<number | null>(null);
   const [editing, setEditing] = useState<Entry | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [plan, setPlan] = useState<Plan | null>(null);
 
   const refresh = useCallback(async (which: string) => {
     setLoading(true);
@@ -87,6 +90,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
       setDeleted(result.data.deleted_entries);
       setTotals(result.data.totals);
       setMonths(result.data.months);
+      setPlan(result.data.plan);
       setLoadFailed(false);
     } else {
       setLoadFailed(true);
@@ -230,6 +234,8 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
           ))}
         </select>
       </header>
+
+      <PlanBanner plan={plan} />
 
       <div className="mb-7">
         <Composer

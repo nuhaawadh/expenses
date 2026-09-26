@@ -109,8 +109,13 @@ export async function POST(request: Request) {
         "Content-Type": "application/json; charset=utf-8",
         "x-app-secret": secret,
       },
-      // user_id يُضاف هنا من الجلسة — آخر نقطة قبل n8n، وبعد أي شيء أرسله المتصفح
-      body: JSON.stringify({ ...built.payload, user_id: session.sub }),
+      // هوية المستخدم تُضاف هنا من الجلسة — آخر نقطة قبل n8n، وبعد أي شيء أرسله المتصفح
+      body: JSON.stringify({
+        ...built.payload,
+        user_id: session.sub,
+        email: session.email,
+        name: session.name,
+      }),
       signal: controller.signal,
       cache: "no-store",
     });

@@ -63,7 +63,19 @@ export interface Totals {
   income_by_category: CategoryTotal[];
 }
 
+export interface Plan {
+  status: "trial" | "active" | "expired";
+  /** الأيام المتبقية من التجربة، وnull إن تعذّر حسابها */
+  days_left: number | null;
+  receipts_used: number;
+  receipts_cap: number;
+  texts_today: number;
+  texts_cap: number;
+  expires_at: string | null;
+}
+
 export interface LedgerData {
+  plan: Plan | null;
   month: string;
   months: string[];
   currency: string;
