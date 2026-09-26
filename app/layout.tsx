@@ -10,7 +10,11 @@ const plex = IBM_Plex_Sans_Arabic({
 
 export const metadata: Metadata = {
   title: "الدفتر",
-  description: "سجّل مصروفاتك بجملة عربية واحدة، واقرأ إجمالياتك فوراً.",
+  description: "سجّل مصروفاتك بجملة عربية واحدة، واعرف وين راحت فلوسك.",
+  applicationName: "الدفتر",
+  // يخفي شريط المتصفح حين يُفتح من شاشة الجوال الرئيسية على iOS
+  appleWebApp: { capable: true, title: "الدفتر", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
