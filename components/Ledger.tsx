@@ -79,6 +79,8 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
   const [loadFailed, setLoadFailed] = useState(false);
   const [newestId, setNewestId] = useState<number | null>(null);
   const [editing, setEditing] = useState<Entry | null>(null);
+  /** فاتورة أرقامها غير متسقة حسابياً — تنبيه بارز مع زر تصحيح مباشر */
+  const [review, setReview] = useState<{ note: string; entry: Entry } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [plan, setPlan] = useState<Plan | null>(null);
 
@@ -119,6 +121,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
     setStage("يقرأ الجملة…");
     setError(null);
     setNotice(null);
+    setReview(null);
 
     const result = await call<AddData>({ action: "add", text });
     await after(result, () => {
@@ -133,6 +136,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
     setBusy(true);
     setError(null);
     setNotice(null);
+    setReview(null);
 
     try {
       setStage("يجهّز الصورة…");
@@ -147,9 +151,21 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
 
       await after(result, () => {
         if (!result.success) return;
-        setNewestId(result.data.entry.id);
-        if (result.data.entry.receipt_saved === false) {
+        const entry = result.data.entry;
+        setNewestId(entry.id);
+        if (entry.receipt_saved === false) {
           setNotice("سُجّلت البيانات، لكن الصورة ما انحفظت.");
+        }
+        /*
+         * الباك إند يوازن الإجمالي مع المجموع الفرعي والضريبة. حين لا تتّسق
+         * الأرقام تُحفظ الحركة على أفضل تقدير مع هذه العلامة — تُعرض بارزة
+         * لأن رقماً خاطئاً يمرّ بصمت أسوأ من رفض الفاتورة.
+         */
+        if (entry.needs_review === true) {
+          setReview({
+            note: entry.review_note || "تحقّق من المبلغ المقروء من الفاتورة.",
+            entry,
+          });
         }
       });
     } catch (e) {
@@ -252,6 +268,36 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
           >
             {error}
           </p>
+        ) : null}
+
+        {review ? (
+          <div
+            role="alert"
+            className="mt-2.5 rounded-lg border border-expense/40 bg-accent-soft px-3 py-2.5 text-[13.5px] leading-relaxed text-ink"
+          >
+            <p>
+              <span className="font-medium">راجع المبلغ.</span> {review.note}
+            </p>
+            <div className="mt-2 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditing(review.entry);
+                  setReview(null);
+                }}
+                className="rounded-full bg-accent px-3 py-1 text-[12.5px] font-medium text-on-accent"
+              >
+                صحّح الحركة
+              </button>
+              <button
+                type="button"
+                onClick={() => setReview(null)}
+                className="text-[12.5px] text-muted underline"
+              >
+                المبلغ صحيح
+              </button>
+            </div>
+          </div>
         ) : null}
 
         {notice ? (

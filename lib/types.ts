@@ -85,7 +85,13 @@ export interface LedgerData {
 }
 
 export interface AddData {
-  entry: Entry & { receipt_saved?: boolean };
+  entry: Entry & {
+    receipt_saved?: boolean;
+    /** الأرقام المستخرجة غير متسقة حسابياً — تحتاج نظرة من المستخدم */
+    needs_review?: boolean;
+    review_note?: string;
+    subtotal?: number;
+  };
 }
 
 export interface MutateData {
