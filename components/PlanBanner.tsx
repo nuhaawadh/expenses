@@ -11,13 +11,21 @@ export function PlanBanner({ plan }: { plan: Plan | null }) {
   const receiptsLeft = plan.receipts_cap - plan.receipts_used;
   const receiptsLow = receiptsLeft <= 30 && receiptsLeft > 0;
   const receiptsOut = receiptsLeft <= 0;
+
+  // ننبّه قبل الوصول للحد اليومي لا بعده — الرفض المفاجئ تجربة سيئة
+  const textsLeft = plan.texts_cap - plan.texts_today;
+  const textsLow = textsLeft <= 10 && textsLeft > 0;
+  const textsOut = textsLeft <= 0;
+
   const expired = plan.status === "expired";
   const endingSoon =
     plan.status === "trial" && plan.days_left !== null && plan.days_left <= 7;
 
-  if (!expired && !endingSoon && !receiptsLow && !receiptsOut) return null;
+  if (!expired && !endingSoon && !receiptsLow && !receiptsOut && !textsLow && !textsOut) {
+    return null;
+  }
 
-  const urgent = expired || receiptsOut;
+  const urgent = expired || receiptsOut || textsOut;
 
   return (
     <div
@@ -56,6 +64,19 @@ export function PlanBanner({ plan }: { plan: Plan | null }) {
         <p className={endingSoon ? "mt-1.5" : undefined}>
           باقي <span className="tnum font-medium text-ink">{receiptsLeft}</span> فاتورة
           من أصل <span className="tnum">{formatAmount(plan.receipts_cap)}</span>.
+        </p>
+      ) : null}
+
+      {textsOut ? (
+        <p className="mt-1.5">
+          <span className="font-medium text-ink">وصلت حد اليوم</span> (
+          <span className="tnum">{plan.texts_cap}</span> حركة). يتجدد عند منتصف الليل —
+          والتعديل والقراءة ما زالا متاحين.
+        </p>
+      ) : textsLow ? (
+        <p className="mt-1.5">
+          باقي <span className="tnum font-medium text-ink">{textsLeft}</span> من حركات
+          اليوم. يتجدد العداد عند منتصف الليل.
         </p>
       ) : null}
     </div>
