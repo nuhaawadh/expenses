@@ -68,7 +68,21 @@ Poster-style brutalist page. Display face Lalezar, body Cairo 500/700/900, tabul
 
 **errors:** `[]` on all 6 final shots, and `[]` on the extra state renders.
 
+## Director round
+Six fixes from the director's review of `c-d-top-p3` and `c-m-top-p3`:
+1. **Mobile above the fold.** At 640px and below, the countdown is now a compact black strip directly under the header: a 64px numeral with «ثانية» beside it, and the tick bar and «11:47 م — رسالة جديدة» next to them. The whole countdown is visible on the first screen at 390×844.
+2. **Mobile CTAs.** «شاهد ديمو دقيقة» stays the full-width black block. «راسلنا» is now an underlined text link beneath it that shows the email: «راسلنا: <bdi>highlink.sa@gmail.com</bdi>». Desktop keeps the boxed ghost button.
+3. **Desktop black panel.** A one-line kicker, «● 11:47 م — رسالة جديدة», sits under the tick bar. The numeral has a «ثانية» unit label set directly under it on a red rule. The caption now starts «باقية من دقيقتك…», so it continues from the unit.
+4. **Copy.** Removed «14 يوم». The trial column now reads «أسبوعين» in large Lalezar with a green «تجربة مجانية» rule. The h2 («جرّبه على استفسارات حقيقية.») and the paragraph no longer repeat the duration.
+5. **Mobile race end state.** The booked bubble is now a calendar card: «انحجز في تقويم المكتب ✓», then the day, then «5:00 العصر» large and on one line, then the details. This fills most of the former gap of about 130px; about 60px of honest breathing room is left.
+6. **Autoplay.** If a wheel or touch event, or «إيقاف», interrupts the demo, the page scroll now syncs to the demo's current position. Scrolling then continues from there instead of snapping back to 0:00.
+   - A toast says «وقّفت الديمو. اسحب لتكمل ↓ أو اضغط «أعد الدقيقة»» for 4 seconds.
+   - The play button becomes «أعد الدقيقة ↻».
+   - I verified this with a scripted wheel event at about 8 seconds into the demo: the timer stayed at 00:00:23, the hint showed, and there were no errors.
+
+**errors:** `[]` on all six `c-*-p4.png` shots and on the extra state renders. scrollWidth equals clientWidth at 390.
+
+**Still weak:** the highlighted «مواعيد محجوزة» in the «كيف يشتغل» quote breaks across two lines at 390px.
+
 ## Known weaknesses
-- On mobile the race lanes are only about 180px wide. After `fit()` hides old bubbles, the هاي لينك lane has a gap of about 130px above the chat at the end state.
-- The desktop hero black panel has a lot of empty black around the "57". It is intentional, but it is a little static.
-- Autoplay stops if the user scrolls or wheels during it. That is by design, but it isn't explained anywhere.
+- On mobile the race lanes are only about 180px wide, so bubbles are dense.

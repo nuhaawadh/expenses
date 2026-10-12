@@ -49,3 +49,14 @@ The signature piece is the inline-SVG coast with waterlining, a wave-hatch sea, 
 - Amiri's gap before a word-initial «ك» is still there in any future copy that has it. I avoided it in headings by rewording.
 - On mobile the active city label can overlap its own pulse ring at peak radius (the pulse is translucent, so it's still readable).
 - The map is deliberately schematic. City and district placement is approximate and labelled as such.
+
+## Director round (b-*-p4)
+Feedback came from b-d-top-p3, b-m-top-p3 and b-d-mid-p3. (The b-*-p2 shots on disk were overwritten by another builder, so I'm ignoring them as instructed.)
+
+1. **Hero mini map:** removed. It was a weaker copy of the real map, and the empty Tarout circle looked like a bug. In its place is a «ملف» index card, styled like a newspaper sidebar. It has a terracotta tab, a 2px ink rule, the 4 jobs as Arabic-Indic numbered rows with hairlines and a one-line gloss each, a "التفاصيل في القسم ٣ ←" link, and a hard sand offset shadow. I replaced the tall 4-row city strip with one compact line under the card: «نطاق التغطية: القطيف | الدمام | الخبر | الظهران». Each city links into the demo and preselects it. On desktop the hero now ends right under the CTA, where before it pushed the CTA below the fold.
+2. **Hero body measure:** I capped the lede at `max-width:26em`, about 60 Arabic characters per line at 21px. `58ch` had no visible effect, because `ch` is the width of a Latin "0" and Naskh letters are narrower. The paragraph and the CTA row now line up with the headline block.
+3. **Chat panel height:** removed the fixed min-heights. On each city switch, JS renders the full conversation in an offscreen clone and animates the chat box from its current height to the target with `height .55s var(--ease-out)`, then plays the sequence inside it. It re-measures on resize and once fonts are ready. I sampled the height during switches on desktop and mobile, for example 455→478→483→484 and 596→551→543→542. The steps never jump, and the final height matches the content.
+4. **Mobile under the hero:** the aside now starts 44px below the email link with a 2px ink section rule and a small diamond ornament centred on it. The first mobile screen ends on that rule, with the top of the «ملف» card just below it.
+5. **Nav:** links get a 2px terracotta underline that draws in from the right, using the custom easing, on hover and focus. The link for the section in view also gets `aria-current="true"` (set by an IntersectionObserver), which keeps the underline and turns the text terracotta.
+
+**errors:** `[]` on all 8 p4 shots and during the scripted city-switch run. The first d-top render fell back to Amiri for the lede because of a font-load race in the harness. I re-rendered it and the final shot shows Noto Naskh.
