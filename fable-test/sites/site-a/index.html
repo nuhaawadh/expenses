@@ -127,7 +127,7 @@ a{color:inherit}
 .cal-body{display:flex;gap:12px;padding:10px 12px 12px;align-items:center}
 .cal-date{flex:none;width:50px;text-align:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;line-height:1.1}
 .cal-date span{display:block;background:var(--amber);color:var(--amber-ink);font-size:.62rem;font-weight:600;padding:3px 0}
-.cal-date b{display:block;font-family:var(--display);font-size:1.3rem;padding:4px 0 5px}
+.cal-date b{display:block;font-family:var(--body);font-weight:600;font-size:1.1rem;padding:5px 0 6px;font-variant-numeric:tabular-nums}
 .cal-info{font-size:.78rem;line-height:1.55;color:#b9c3ce}
 .cal-info b{display:block;color:var(--text);font-size:.85rem;font-weight:600}
 .composer{display:flex;align-items:center;gap:8px;padding:8px 10px 14px;background:#0f151c;border-top:1px solid var(--line)}
@@ -148,6 +148,7 @@ a{color:inherit}
 .phone{transition:box-shadow 1s var(--ease-out)}
 .thread{transition:opacity .5s var(--ease-out)}
 .thread.fading{opacity:0}
+.thread>*{flex-shrink:0}
 .phone.flash{animation:flash 1.2s var(--ease-out)}
 @keyframes flash{0%{box-shadow:0 0 0 0 rgba(242,165,65,.6),0 40px 80px -30px rgba(0,0,0,.9)}100%{box-shadow:0 0 0 22px rgba(242,165,65,0),0 40px 80px -30px rgba(0,0,0,.9)}}
 
@@ -513,7 +514,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opa
   function calCard(){
     var c = document.createElement('div'); c.className = 'cal';
     c.innerHTML = '<div class="cal-top"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>انضاف لتقويم المكتب</div>'+
-      '<div class="cal-body"><div class="cal-date"><span>السبت</span><b>٥:٠٠</b></div><div class="cal-info"><b>معاينة شقة ٣ غرف</b>الخبر الشمالية · إيجار · ميزانية حدود ٤٥ ألف</div></div>';
+      '<div class="cal-body"><div class="cal-date"><span>السبت</span><b>٥:٠٠</b></div><div class="cal-info"><b>معاينة شقة ٣ غرف</b>الخبر الشمالية · إيجار سنوي</div></div>';
     return c;
   }
   function play(){
@@ -618,7 +619,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opa
     return { draw: draw, el: cv };
   }
   var skies = [
-    Skyline(document.getElementById('sky'),  {seed:1147, min:.25, range:.65, density:.085, officeX:.12, fadeMid:.35}),
+    Skyline(document.getElementById('sky'),  {seed:1147, min:.25, range:.65, density:.085, officeX:.47, fadeMid:.35}),
     Skyline(document.getElementById('sky2'), {seed:733,  min:.3,  range:.6,  density:.07,  officeX:.5,  fadeMid:.45, antennas:true})
   ];
   var visible = new Set(skies);
