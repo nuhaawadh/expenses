@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
+import { Credit } from "@/components/Credit";
 
 const MESSAGES: Record<string, string> = {
   config: "الإعداد غير مكتمل. راجع متغيّرات البيئة.",
@@ -82,6 +83,8 @@ export default async function LoginPage({
           </a>
           .
         </p>
+
+        <Credit className="mt-10" />
       </div>
     </main>
   );

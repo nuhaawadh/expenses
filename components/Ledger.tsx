@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Breakdown } from "@/components/Breakdown";
 import { Composer } from "@/components/Composer";
+import { Credit } from "@/components/Credit";
 import { EntryEditor } from "@/components/EntryEditor";
 import { EntryList } from "@/components/EntryList";
 import { PlanBanner } from "@/components/PlanBanner";
@@ -364,6 +365,8 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
           />
         </div>
       )}
+
+      <Credit className="mt-12 pb-6" />
 
       {editing ? (
         <EntryEditor
