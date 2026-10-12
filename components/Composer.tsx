@@ -166,7 +166,7 @@ export function Composer({
         <button
           type="submit"
           disabled={busy || text.trim().length === 0}
-          className="shrink-0 rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-on-accent transition-opacity disabled:opacity-35"
+          className="shrink-0 bg-cta px-4 py-2 text-[14px] font-medium text-on-cta transition-opacity disabled:opacity-35"
         >
           {busy ? "…" : "سجّل"}
         </button>

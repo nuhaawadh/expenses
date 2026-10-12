@@ -32,9 +32,9 @@ function Rows({ rows, side }: { rows: CategoryTotal[]; side: Side }) {
               </span>
             </div>
             <div className="mt-1.5 flex items-center gap-2">
-              <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-line-soft">
+              <span className="h-1.5 flex-1 overflow-hidden bg-line-soft">
                 <span
-                  className={`block h-full rounded-full ${side === "income" ? "bg-income" : "bg-accent"}`}
+                  className={`block h-full ${side === "income" ? "bg-income" : "bg-accent"}`}
                   style={{
                     width: `${largest > 0 ? Math.max(3, (row.amount / largest) * 100) : 0}%`,
                   }}

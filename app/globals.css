@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 /*
- * هوية اللون: أخضر العلم السعودي #006C35 مع الأبيض.
- * الأخضر هو نفسه لون الدخل — مال داخل = أخضر — والأحمر للصرف والرصيد
- * السالب، فتبقى الدلالة المحاسبية مقروءة بلا لون ثالث يزاحم الهوية.
+ * هوية اللون: هوية هاي لينك (highlink-brand/brand/tokens.css).
+ * ورق أبيض وحبر أسود، والليموني #d0f94a مرة واحدة في الشاشة (زر الإجراء
+ * الأساسي: `bg-cta`)، والتدرج تيل→نعناعي→ليموني على كلمة واحدة فقط (`.grad`).
+ * الدخل أخضر والصرف أحمر من ألوان الحالة في الهوية، فتبقى الدلالة المحاسبية.
+ * بلا ظلال وبلا زوايا مدوّرة — أصفار نصف القطر والظل مضبوطة في `@theme` تحت.
  *
  * الألوان تُعرَّف كمتغيّرات CSS عادية حتى يمكن تبديلها في الوضع الداكن،
  * ثم يشير إليها `@theme inline` فتصير أدوات Tailwind (bg-canvas…).
@@ -12,38 +14,55 @@
  */
 
 :root {
-  --c-canvas: #f5f8f6;
+  --c-canvas: #f4f4f4;
   --c-surface: #ffffff;
-  --c-line: #dde7e1;
-  --c-line-soft: #eef3f0;
-  --c-ink: #0f1c15;
-  --c-muted: #5b6f64;
-  --c-faint: #91a399;
-  --c-accent: #006c35;
-  --c-accent-soft: #e5f1ea;
-  --c-expense: #9d2235;
-  --c-income: #006c35;
+  --c-line: #d4d4d4;
+  --c-line-soft: #f4f4f4;
+  --c-ink: #0a0a0a;
+  --c-muted: #4a4a4a;
+  --c-faint: #767676;
+  --c-accent: #0a0a0a;
+  --c-accent-soft: #f4f4f4;
+  --c-expense: #c81e1e;
+  --c-income: #1b7f3b;
   --c-on-accent: #ffffff;
+  --c-cta: #d0f94a;
+  --c-on-cta: #0a0a0a;
+  /* على الأبيض يقف التدرج عند النعناعي: الليموني ما يُقرأ على خلفية فاتحة */
+  --c-grad: linear-gradient(to left, #4ea5a3, #6eda8e);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --c-canvas: #0a130d;
-    --c-surface: #111c15;
-    --c-line: #203029;
-    --c-line-soft: #16231b;
-    --c-ink: #e8f0ea;
-    --c-muted: #93a89b;
-    --c-faint: #5f7569;
-    --c-accent: #4eb985;
-    --c-accent-soft: #13251b;
-    --c-expense: #e58094;
-    --c-income: #4eb985;
-    --c-on-accent: #05120a;
+    --c-canvas: #0a0a0a;
+    --c-surface: #161616;
+    --c-line: #2e2e2e;
+    --c-line-soft: #2e2e2e;
+    --c-ink: #f5f5f5;
+    --c-muted: #b8b8b8;
+    --c-faint: #8a8a8a;
+    --c-accent: #f5f5f5;
+    --c-accent-soft: #161616;
+    --c-expense: #f87171;
+    --c-income: #4ade80;
+    --c-on-accent: #0a0a0a;
+    --c-grad: linear-gradient(to left, #4ea5a3, #6eda8e, #d8f869);
   }
 }
 
 @theme inline {
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 2px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --shadow-sm: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+  --color-cta: var(--c-cta);
+  --color-on-cta: var(--c-on-cta);
   --color-canvas: var(--c-canvas);
   --color-surface: var(--c-surface);
   --color-line: var(--c-line);
@@ -66,6 +85,20 @@ body {
   background-color: var(--c-canvas);
   color: var(--c-ink);
   -webkit-font-smoothing: antialiased;
+}
+
+/* أفاتار الحساب بتدرج الهوية (المكان الوحيد المسموح فيه بالدائرة) */
+.avatar-grad {
+  background: linear-gradient(180deg, #9be77b 0%, #69d794 50%, #55ba9e 100%);
+  color: #0a0a0a;
+}
+
+/* التدرج على كلمة واحدة فقط في الشاشة */
+.grad {
+  background: var(--c-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* الأرقام في الجداول المالية يجب أن تصطف عمودياً */

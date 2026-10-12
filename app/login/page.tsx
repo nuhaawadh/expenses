@@ -27,14 +27,16 @@ export default async function LoginPage({
   return (
     <main className="flex min-h-dvh items-center justify-center px-5">
       <div className="w-full max-w-sm text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">الدفتر</h1>
+        <h1 className="text-3xl font-bold">
+          <span className="grad">الدفتر</span>
+        </h1>
         <p className="mx-auto mt-2 max-w-xs text-[14.5px] leading-relaxed text-muted">
           سجّل مصروفاتك بجملة عربية واحدة، أو صوّر الفاتورة — واعرف وين راحت فلوسك.
         </p>
 
         <a
           href="/api/auth/login"
-          className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl bg-accent px-4 py-3 text-[15px] font-medium text-on-accent"
+          className="mt-8 flex w-full items-center justify-center gap-2.5 bg-cta px-4 py-3 text-[15px] font-medium text-on-cta"
         >
           <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
             <path

@@ -205,7 +205,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
             <button
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="حسابي"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-[12px] font-medium text-on-accent"
+              className="flex h-7 w-7 items-center justify-center rounded-full avatar-grad text-[12px] font-bold"
             >
               {(user.name || user.email || "؟").trim().charAt(0).toUpperCase()}
             </button>
@@ -285,7 +285,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
                   setEditing(review.entry);
                   setReview(null);
                 }}
-                className="rounded-full bg-accent px-3 py-1 text-[12.5px] font-medium text-on-accent"
+                className="bg-accent px-3 py-1 text-[12.5px] font-medium text-on-accent"
               >
                 صحّح الحركة
               </button>
@@ -341,7 +341,7 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
                 <button
                   type="button"
                   onClick={() => void addText(example)}
-                  className="rounded-full border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-accent"
+                  className="border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   {example}
                 </button>
