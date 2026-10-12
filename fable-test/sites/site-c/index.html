@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الدقيقة — هاي لينك</title>
+<meta name="description" content="وكيل ذكاء اصطناعي على واتساب لمكاتب العقار في المنطقة الشرقية. يرد خلال ثواني، 24/7.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Cairo:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F0EB; --ink:#0A0A0A; --red:#E10600; --red-ink:#B80500; --red-bg:#C70500; --green:#00C853; --rule:#BDBDBD; --mute:#4A4A4A;
+  --ease-out:cubic-bezier(.2,.8,.2,1); --ease-in-out:cubic-bezier(.7,0,.2,1); --ease-snap:cubic-bezier(.3,1.4,.4,1);
+  --display:"Lalezar", "Cairo", sans-serif; --body:"Cairo", sans-serif;
+  --gut:clamp(16px,3vw,40px); --bw:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:500;font-size:clamp(16px,1.1vw,18px);line-height:1.7}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;text-wrap:balance}
+p{text-wrap:pretty}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.wrap{padding-inline:var(--gut)}
+.rule{border-top:var(--bw) solid var(--ink)}
+.skip{position:absolute;inset-inline-start:8px;top:-80px;background:var(--ink);color:var(--paper);padding:8px 14px;z-index:99}
+.skip:focus{top:8px}
+
+/* header */
+.top{display:flex;align-items:stretch;justify-content:space-between;border-bottom:var(--bw) solid var(--ink);position:sticky;top:0;background:var(--paper);z-index:20}
+.brand{display:flex;align-items:center;gap:10px;padding:10px var(--gut);font-weight:900;font-size:18px;text-decoration:none}
+.brand b{display:inline-block;width:14px;height:14px;background:var(--red)}
+.since{display:flex;align-items:center;gap:10px;padding:10px var(--gut);border-inline-start:var(--bw) solid var(--ink);font-size:14px;font-weight:700}
+.since .num{font-size:18px;font-weight:900;min-width:5.2ch;text-align:center}
+.since .dot{width:9px;height:9px;border-radius:50%;background:var(--red);animation:blink 1s steps(2,jump-none) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:14px;font-family:var(--body);font-weight:900;font-size:clamp(18px,1.6vw,22px);padding:16px 26px;border:var(--bw) solid var(--ink);background:var(--ink);color:var(--paper);text-decoration:none;cursor:pointer;transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out),background .25s var(--ease-out)}
+.btn:hover{transform:translate(4px,-4px);box-shadow:-6px 6px 0 var(--red)}
+.btn:active{transform:none;box-shadow:none}
+.btn .arr{display:inline-block;transition:transform .3s var(--ease-out)}
+.btn:hover .arr{transform:translateX(-6px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{box-shadow:-6px 6px 0 var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr auto;border-bottom:var(--bw) solid var(--ink);min-height:calc(100svh - 52px)}
+.hero-copy{padding:clamp(28px,4vw,56px) var(--gut);display:flex;flex-direction:column;justify-content:space-between;gap:32px}
+.kicker{font-weight:900;font-size:14px;letter-spacing:0;display:flex;gap:10px;align-items:center}
+.kicker::before{content:"";width:28px;height:var(--bw);background:var(--red)}
+.kicker{flex-wrap:wrap;row-gap:2px}.kicker .cities{white-space:nowrap}
+.hero h1{font-size:clamp(52px,7.4vw,118px);max-width:12ch;margin-block:18px 0}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero .lede{max-width:46ch;font-size:clamp(17px,1.35vw,21px)}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.hero-num{border-inline-start:var(--bw) solid var(--ink);background:var(--ink);color:var(--paper);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,3vw,40px);width:clamp(320px,38vw,600px);position:relative;overflow:hidden}
+.hero-num .big{font-family:var(--display);font-size:clamp(200px,24vw,400px);line-height:.8;color:var(--paper);direction:ltr;text-align:center}
+.hero-num .big span{color:var(--red)}
+.hero-num .cap{font-weight:700;font-size:15px;color:#D9D7D2;border-top:2px solid #3A3A3A;padding-top:12px}
+.tickbar{display:flex;gap:3px;direction:ltr;height:28px;align-items:flex-end}
+.tickbar i{flex:1;background:#3A3A3A;height:40%;transition:background .2s var(--ease-out),height .2s var(--ease-out)}
+.tickbar i.on{background:var(--red);height:100%}
+
+/* sections */
+section{border-bottom:var(--bw) solid var(--ink)}
+.sec-head{display:grid;grid-template-columns:minmax(120px,220px) 1fr;border-bottom:var(--bw) solid var(--ink)}
+.sec-head .idx{font-family:var(--display);font-size:clamp(40px,4vw,64px);padding:14px var(--gut);border-inline-end:var(--bw) solid var(--ink);line-height:1;display:flex;align-items:center}
+.sec-head h2{font-size:clamp(32px,4.2vw,68px);padding:18px var(--gut)}
+
+/* pain */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.pain-grid>div{padding:clamp(22px,3vw,40px) var(--gut);border-inline-end:var(--bw) solid var(--ink);display:flex;flex-direction:column;gap:12px}
+.pain-grid>div:last-child{border-inline-end:0;background:var(--red-bg);color:var(--paper)}
+.pain-grid .t{font-family:var(--display);font-size:clamp(56px,6vw,96px);line-height:1}
+.pain-grid h3{font-family:var(--body);font-weight:900;font-size:clamp(19px,1.5vw,24px);line-height:1.4}
+.pain-grid p{color:var(--mute)}
+.pain-grid>div:last-child p{color:var(--paper)}
+
+/* race */
+.race{position:relative;height:420vh;border-bottom:var(--bw) solid var(--ink)}
+.stage{position:sticky;top:52px;height:calc(100svh - 52px);display:flex;flex-direction:column}
+.stage-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px var(--gut);border-bottom:var(--bw) solid var(--ink);font-size:14px;font-weight:700}
+.stage-bar h2{font-family:var(--body);font-weight:900;font-size:clamp(16px,1.3vw,20px)}
+.illus{background:var(--ink);color:var(--paper);padding:3px 10px;font-weight:700;font-size:13px;white-space:nowrap}
+.play{font-family:var(--body);font-weight:900;font-size:14px;background:transparent;border:2px solid var(--ink);padding:4px 12px;cursor:pointer;transition:background .2s var(--ease-out),color .2s var(--ease-out)}
+.play:hover,.play[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.lanes{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0}
+.lane{display:flex;flex-direction:column;min-height:0;padding:clamp(14px,2vw,28px) var(--gut);gap:10px;transition:background .5s var(--ease-out),color .5s var(--ease-out)}
+.lane+.lane{border-inline-start:var(--bw) solid var(--ink)}
+.lane-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid currentColor;padding-bottom:6px}
+.lane-h h3{font-size:clamp(26px,2.6vw,42px)}
+.lane-h small{font-weight:700;font-size:13px}
+.timer{font-family:var(--body);font-weight:900;font-size:clamp(46px,7.4vw,124px);line-height:1;direction:ltr;text-align:end;letter-spacing:-.02em}
+.unit{text-wrap:balance;font-weight:900;font-size:clamp(15px,1.3vw,20px);min-height:1.7em}
+.chat{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;border-top:2px dashed var(--rule);padding-top:10px}
+.msg{max-width:88%;padding:8px 12px;border:2px solid var(--ink);font-size:clamp(13px,1vw,15px);line-height:1.55;background:var(--paper);opacity:0;transform:translateY(10px);transition:opacity .35s var(--ease-out),transform .35s var(--ease-out);display:none}
+.msg.show{display:block}
+.msg.in{opacity:1;transform:none}
+.msg.client{align-self:flex-start}
+.msg.agent{align-self:flex-end;background:var(--ink);color:var(--paper)}
+.msg .meta{display:block;font-size:11px;font-weight:700;opacity:.8;margin-top:2px;text-align:end}
+.msg .meta .tk{color:#8A8A8A;letter-spacing:-3px}
+.msg .meta .tk.read{color:var(--green)}
+.typing{align-self:flex-end;background:var(--ink);padding:10px 14px;display:none;gap:5px;border:2px solid var(--ink)}
+.typing.on{display:inline-flex}
+.typing i{width:7px;height:7px;background:var(--paper);border-radius:50%;animation:hop 1s var(--ease-in-out) infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes hop{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+.msg.gone{display:none!important}
+.msg.booked{background:var(--green);color:var(--ink);border-color:var(--ink);font-weight:900}
+.lane{position:relative;isolation:isolate}
+.chat{position:relative;isolation:isolate}
+.lane .fill{position:absolute;inset-inline:0;bottom:0;height:calc(var(--f,0) * 100%);background:repeating-linear-gradient(-45deg,rgba(225,6,0,.16) 0 10px,rgba(225,6,0,.06) 10px 20px);z-index:-1;border-top:2px solid var(--red);transition:height .15s var(--ease-out)}
+.lane .fill b{position:absolute;inset-inline-end:8px;top:4px;font-size:11px;font-weight:900;color:var(--red-ink)}
+.lane.lost{background:var(--red-bg);color:var(--paper)}
+.lane.lost .fill{opacity:0}
+.lane.lost .msg.client{color:var(--ink)}
+.lane.won .timer{color:var(--ink)}
+.verdict{text-wrap:balance;font-family:var(--display);font-size:clamp(20px,2.2vw,34px);line-height:1.2;min-height:1.3em}
+.verdict.slam{animation:slam .55s var(--ease-snap) both}
+@keyframes slam{0%{transform:scale(1.7) rotate(-4deg);opacity:0}100%{transform:none;opacity:1}}
+.progress{height:6px;background:var(--rule);direction:rtl}
+.progress i{display:block;height:100%;width:0;background:var(--red)}
+
+/* jobs */
+.jobs{display:grid;grid-template-columns:repeat(4,1fr)}
+.job{padding:clamp(22px,2.4vw,36px) var(--gut);border-inline-end:var(--bw) solid var(--ink);display:flex;flex-direction:column;gap:14px;min-height:340px;transition:background .3s var(--ease-out),color .3s var(--ease-out)}
+.job:last-child{border-inline-end:0}
+.job:hover{background:var(--ink);color:var(--paper)}
+.job:hover p{color:#D9D7D2}
+.job .n{font-family:var(--display);font-size:clamp(64px,6vw,104px);line-height:.9;color:var(--red)}
+.job h3{font-size:clamp(26px,2.2vw,36px)}
+.job p{color:var(--mute);margin-top:auto}
+
+/* how */
+.how{display:grid;grid-template-columns:1fr 1fr}
+.how ol{list-style:none;counter-reset:s}
+.how li{counter-increment:s;display:grid;grid-template-columns:72px 1fr;gap:16px;padding:22px var(--gut);border-bottom:2px solid var(--ink)}
+.how li:last-child{border-bottom:0}
+.how li::before{content:counter(s,decimal-leading-zero);font-family:var(--display);font-size:44px;line-height:1}
+.how li b{display:block;font-weight:900;font-size:clamp(18px,1.4vw,22px)}
+.how li span{color:var(--mute)}
+.how aside{border-inline-start:var(--bw) solid var(--ink);padding:clamp(24px,3vw,48px) var(--gut);display:flex;flex-direction:column;justify-content:center;gap:18px}
+.how aside p.q{font-family:var(--display);font-size:clamp(30px,3.2vw,52px);line-height:1.25;text-wrap:balance}
+.how aside p.q mark{background:var(--green);color:var(--ink);padding-inline:6px}
+
+/* trial */
+.trial{background:var(--ink);color:var(--paper);display:grid;grid-template-columns:auto 1fr;align-items:stretch}
+.trial .two small{font-family:var(--body);font-weight:900;font-size:clamp(18px,1.6vw,24px);color:var(--green);align-self:flex-end;margin-bottom:.9em;margin-inline-start:14px}
+.trial .two{font-family:var(--display);font-size:clamp(120px,15vw,250px);line-height:.95;padding:clamp(20px,3vw,40px) var(--gut);border-inline-end:var(--bw) solid var(--paper);display:flex;align-items:center;color:var(--paper)}
+.trial .copy{padding:clamp(24px,3.4vw,56px) var(--gut);display:flex;flex-direction:column;justify-content:center;gap:18px}
+.trial h2{font-size:clamp(32px,3.6vw,60px)}
+.trial p{color:#D9D7D2;max-width:52ch;font-size:clamp(17px,1.3vw,20px)}
+.trial .stamp{align-self:flex-start;border:var(--bw) solid var(--green);color:var(--green);font-weight:900;padding:6px 14px;transform:rotate(-2deg);font-size:16px}
+
+/* final */
+.final{display:grid;grid-template-columns:1fr minmax(300px,36vw)}
+.final-copy{padding:clamp(36px,6vw,96px) var(--gut);display:flex;flex-direction:column;gap:26px}
+.final-num{background:var(--green);border-inline-start:var(--bw) solid var(--ink);display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(20px,3vw,40px)}
+.final-num .num{font-family:var(--body);font-weight:900;font-size:clamp(96px,12vw,200px);line-height:.9;direction:ltr;text-align:end;letter-spacing:-.04em}
+.final-num p{font-weight:900;border-top:var(--bw) solid var(--ink);padding-top:10px}
+.final h2{font-size:clamp(44px,7vw,120px);max-width:14ch}
+.final h2 em{font-style:normal;color:var(--red)}
+.mail{font-family:var(--body);font-weight:900;font-size:clamp(22px,3.6vw,56px);text-decoration:none;border-bottom:var(--bw) solid var(--ink);align-self:flex-start;line-height:1.3;transition:color .25s var(--ease-out),border-color .25s var(--ease-out)}
+.mail:hover{color:var(--red);border-color:var(--red)}
+.final .ctas{display:flex;gap:14px;flex-wrap:wrap}
+
+footer{display:grid;grid-template-columns:1fr auto auto;gap:0;font-size:14px;font-weight:700}
+footer>*{padding:16px var(--gut)}
+footer>*+*{border-inline-start:var(--bw) solid var(--ink)}
+footer a{text-decoration:none}
+footer a:hover{color:var(--red-ink)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr}
+  .hero-num{width:auto;border-inline-start:0;border-top:var(--bw) solid var(--ink)}
+  .jobs{grid-template-columns:1fr 1fr}
+  .job:nth-child(2){border-inline-end:0}
+  .job:nth-child(-n+2){border-bottom:var(--bw) solid var(--ink)}
+  .how{grid-template-columns:1fr}
+  .how aside{border-inline-start:0;border-top:var(--bw) solid var(--ink)}
+}
+@media (max-width:640px){
+  :root{--bw:2px}
+  .top{font-size:13px}
+  .since span.lbl{display:none}
+  .sec-head{grid-template-columns:72px 1fr}
+  .pain-grid{grid-template-columns:1fr}
+  .pain-grid>div{border-inline-end:0;border-bottom:var(--bw) solid var(--ink)}
+  .pain-grid>div:last-child{border-bottom:0}
+  .jobs{grid-template-columns:1fr}
+  .job{border-inline-end:0;border-bottom:var(--bw) solid var(--ink);min-height:0}
+  .job:last-child{border-bottom:0}
+  .lane{padding:12px 12px}
+  .timer{font-size:clamp(30px,10vw,46px)}
+  .lane-h h3{font-size:22px}
+  .lane-h small{display:none}
+  .msg{max-width:100%;font-size:12px;padding:6px 8px}
+  .stage-bar .illus{font-size:11px}
+  .trial{grid-template-columns:1fr}
+  .trial .two{border-inline-end:0;border-bottom:var(--bw) solid var(--paper)}
+  footer{grid-template-columns:1fr}
+  .hero .ctas .btn{flex:1 1 100%;justify-content:center}
+  .stage-bar{display:grid;grid-template-columns:1fr auto;gap:6px 10px}
+  .stage-bar h2{white-space:nowrap}
+  .stage-bar .illus{grid-column:1/-1;grid-row:2;justify-self:start}
+  .play{white-space:nowrap}
+  .unit{min-height:3.4em;font-size:14px;line-height:1.5}
+  .final{grid-template-columns:1fr}
+  .final-num{border-inline-start:0;border-top:var(--bw) solid var(--ink)}
+  footer>*+*{border-inline-start:0;border-top:var(--bw) solid var(--ink)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">تخطَّ للمحتوى</a>
+<header class="top">
+  <a class="brand" href="#main" aria-label="هاي لينك — الرئيسية"><b aria-hidden="true"></b>هاي لينك</a>
+  <div class="since" aria-live="off" title="الوقت من فتحت الصفحة">
+    <i class="dot" aria-hidden="true"></i><span class="lbl">من فتحت الصفحة:</span><span class="num ltr" id="since">00:00</span>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="h1">
+    <div class="hero-copy">
+      <div>
+        <p class="kicker"><span>لمكاتب العقار في</span> <span class="cities">الخبر · الدمام · الظهران · القطيف</span></p>
+        <h1 id="h1">العميل ما ينتظر. <em>دقيقة</em> وراح لمكتب ثاني.</h1>
+      </div>
+      <p class="lede">هاي لينك وكيل ذكاء اصطناعي على واتساب مكتبك: يرد خلال ثواني، يعرف وش يبي العميل، ويحجز المعاينة في تقويمك — الساعة 11 بالليل أو الجمعة الظهر، ما يفرق.</p>
+      <div class="ctas">
+        <a class="btn" href="#race" data-play>شاهد ديمو دقيقة <span class="arr" aria-hidden="true">←</span></a>
+        <a class="btn ghost" href="mailto:highlink.sa@gmail.com">راسلنا</a>
+      </div>
+    </div>
+    <div class="hero-num" aria-hidden="true">
+      <div class="tickbar" id="tickbar"></div>
+      <div class="big num"><span id="heroSec">60</span></div>
+      <p class="cap">ثانية باقية من دقيقتك على هالصفحة. خلال دقيقة وحدة، الوكيل يرد ويسأل ويحجز.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="pain-h">
+    <div class="sec-head"><span class="idx">01</span><h2 id="pain-h">الاستفسار يجي بالليل. الرد يجي الصبح.</h2></div>
+    <div class="pain-grid">
+      <div class="reveal"><span class="t num ltr">11:47</span><h3>الرسالة توصل</h3><p>العميل فاضي الحين، بعد الدوام. فاتح واتساب ويرسل لكم ولكم مكتب ثاني بنفس الوقت.</p></div>
+      <div class="reveal"><span class="t">الويكند</span><h3>المكتب مقفل</h3><p>الموظف في بيته، والجوال صامت. الرسالة جالسة بصح واحد رمادي.</p></div>
+      <div class="reveal"><span class="t">راح</span><h3>أول من يرد ياخذه</h3><p>لين يفتح الموظف الجوال، العميل يكون اتصل على مكتب ثاني ورتّب معاينته.</p></div>
+    </div>
+  </section>
+
+  <section class="race" id="race" aria-labelledby="race-h">
+    <div class="stage">
+      <div class="stage-bar">
+        <h2 id="race-h">نفس الرسالة. مكتبين.</h2>
+        <span class="illus">مثال توضيحي — مو بيانات حقيقية</span>
+        <button class="play" type="button" id="play" aria-pressed="false">شغّل الدقيقة ▸</button>
+      </div>
+      <div class="lanes">
+        <div class="lane" id="laneOffice">
+          <div class="lane-h"><h3>مكتبك</h3><small>بدون وكيل</small></div>
+          <div class="timer num" id="tOffice">00:00:00</div>
+          <div class="unit" id="uOffice">الرسالة وصلت 11:47 م</div>
+          <div class="chat" id="cOffice"><div class="fill" id="fill" aria-hidden="true"><b>وقت ضايع</b></div></div>
+          <div class="verdict" id="vOffice" aria-live="polite"></div>
+        </div>
+        <div class="lane" id="laneHL">
+          <div class="lane-h"><h3>هاي لينك</h3><small>وكيل واتساب</small></div>
+          <div class="timer num" id="tHL">00:00:00</div>
+          <div class="unit" id="uHL">الرسالة وصلت 11:47 م</div>
+          <div class="chat" id="cHL"></div>
+          <div class="verdict" id="vHL" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="jobs-h">
+    <div class="sec-head"><span class="idx">02</span><h2 id="jobs-h">أربع شغلات، بدون ما ينام.</h2></div>
+    <div class="jobs">
+      <article class="job reveal"><span class="n">1</span><h3>يرد خلال ثواني</h3><p>24/7. أول ما توصل الرسالة يرد بلهجة ودّية ومهنية، باسم مكتبك.</p></article>
+      <article class="job reveal"><span class="n">2</span><h3>يأهّل العميل</h3><p>إيجار ولا شراء؟ كم الميزانية؟ أي حي؟ يجمعها بأسئلة طبيعية، مو استمارة.</p></article>
+      <article class="job reveal"><span class="n">3</span><h3>يحجز المعاينة</h3><p>يعرض المواعيد الفاضية من تقويم المكتب ويثبّت الموعد مباشرة.</p></article>
+      <article class="job reveal"><span class="n">4</span><h3>يتابع لحاله</h3><p>العميل ما رد؟ يذكّره. قبل الموعد؟ يأكد عليه. ما يضيع أحد بين الكراسي.</p></article>
+    </div>
+  </section>
+
+  <section aria-labelledby="how-h">
+    <div class="sec-head"><span class="idx">03</span><h2 id="how-h">كيف يشتغل عندك</h2></div>
+    <div class="how">
+      <ol>
+        <li class="reveal"><div><b>نربطه برقم واتساب المكتب</b><span>نفس الرقم اللي عملاءك يعرفونه. ما تحتاج رقم جديد.</span></div></li>
+        <li class="reveal"><div><b>نعلّمه عروضك وأحيائك</b><span>الوحدات المتاحة، الأسعار، الأحياء اللي تغطيها، وطريقة كلام مكتبك.</span></div></li>
+        <li class="reveal"><div><b>نوصله بتقويمك</b><span>يشوف أوقاتك الفاضية ويحجز فيها، وأنت تشوف كل موعد قبل لا تطلع.</span></div></li>
+        <li class="reveal"><div><b>فريقك يستلم العميل جاهز</b><span>توصلك خلاصة: وش يبي، ميزانيته، الحي، وموعد المعاينة.</span></div></li>
+      </ol>
+      <aside class="reveal">
+        <p class="q">موظفك يبدأ يومه بـ<mark>مواعيد محجوزة</mark>، مو برسايل بايتة.</p>
+        <a class="btn ghost" href="#race" data-play style="align-self:flex-start">شاهد ديمو دقيقة <span class="arr" aria-hidden="true">←</span></a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="trial" aria-labelledby="trial-h">
+    <div class="two" aria-hidden="true"><span class="num">14</span><small>يوم</small></div>
+    <div class="copy">
+      <span class="stamp">بدون مخاطرة</span>
+      <h2 id="trial-h">جرّبه أسبوعين على استفسارات حقيقية.</h2>
+      <p>نشغّله على رسايل عملاءك الفعلية لمدة أسبوعين. إذا ما تحسّنت المعاينات المحجوزة، ما تدفع شي. لا عقد طويل، ولا رسوم تركيب.</p>
+    </div>
+  </section>
+
+  <section class="final" aria-labelledby="final-h">
+   <div class="final-copy">
+    <h2 id="final-h">الدقيقة الجاية <em>لمين؟</em></h2>
+    <p style="max-width:40ch">ارسل لنا إيميل باسم المكتب والمدينة، ونرتب لك ديمو على رسالة من عندك.</p>
+    <a class="mail" href="mailto:highlink.sa@gmail.com"><bdi>highlink.sa@gmail.com</bdi></a>
+    <div class="ctas"><a class="btn" href="#race" data-play>شاهد ديمو دقيقة <span class="arr" aria-hidden="true">←</span></a></div>
+   </div>
+   <div class="final-num" aria-hidden="true"><span class="num">0:47</span><p>زمن الحجز في المثال التوضيحي فوق. قبل لا تكمل الدقيقة.</p></div>
+  </section>
+</main>
+
+<footer>
+  <span>هاي لينك — by Nuha Awad / نهى عوض</span>
+  <a href="https://highlink.tech"><bdi>highlink.tech</bdi></a>
+  <a href="mailto:highlink.sa@gmail.com"><bdi>highlink.sa@gmail.com</bdi></a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var pad = function(n){ return (n<10?"0":"")+n; };
+
+  /* header: time since page opened */
+  var t0 = Date.now(), sinceEl = document.getElementById("since");
+  setInterval(function(){
+    var s = Math.floor((Date.now()-t0)/1000);
+    sinceEl.textContent = pad(Math.floor(s/60)) + ":" + pad(s%60);
+  }, 1000);
+
+  /* hero: 60 tick bar counting the current minute */
+  var bar = document.getElementById("tickbar"), heroSec = document.getElementById("heroSec");
+  for (var i=0;i<60;i++){ bar.appendChild(document.createElement("i")); }
+  var ticks = bar.children;
+  function heroTick(){
+    var s = Math.floor((Date.now()-t0)/1000)%60;
+    for (var j=0;j<60;j++){ ticks[j].classList.toggle("on", j<=s); }
+    heroSec.textContent = pad(60 - s);
+  }
+  heroTick(); setInterval(heroTick, 1000);
+
+  /* reveal */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, {threshold:.15});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+  /* race — illustrative timeline. t = seconds since 11:47:00 PM */
+  var office = [
+    {t:0,    who:"client", txt:"السلام عليكم، عندكم شقة 3 غرف للإيجار في الخبر الشمالية؟", time:"11:47 م", tick:"✓"},
+    {t:2700, who:"client", txt:"موجودين؟", time:"12:32 ص", tick:"✓"},
+    {t:28200,who:"client", txt:"خلاص، لقيت عند مكتب ثاني. شكراً", time:"7:37 ص", tick:"✓"}
+  ];
+  var hl = [
+    {t:0,  who:"client", txt:"السلام عليكم، عندكم شقة 3 غرف للإيجار في الخبر الشمالية؟", time:"11:47 م", tick:"✓✓", read:true},
+    {t:4,  who:"agent",  txt:"وعليكم السلام، حياك الله. عندنا خيارات بالخبر الشمالية. الإيجار سنوي؟ وكم ميزانيتك تقريباً؟", time:"11:47 م"},
+    {t:19, who:"client", txt:"سنوي، حول 55 ألف. ونبي نسكن بداية الشهر الجاي", time:"11:47 م", tick:"✓✓", read:true},
+    {t:26, who:"agent",  txt:"تمام. فيه شقتين تناسبك. المعاينة تناسبك السبت 5 العصر ولا الأحد 7 المغرب؟", time:"11:47 م"},
+    {t:41, who:"client", txt:"السبت 5", time:"11:47 م", tick:"✓✓", read:true},
+    {t:47, who:"agent",  txt:"انحجز ✓ السبت 5:00 العصر — معاينة شقة 3 غرف، الخبر الشمالية. بنذكّرك قبلها.", time:"11:47 م", booked:true}
+  ];
+  var HL_DONE = 47, LOST = 28200;
+
+  function build(list, host){
+    return list.map(function(m){
+      var el = document.createElement("div");
+      el.className = "msg " + m.who + (m.booked?" booked":"");
+      el.textContent = m.txt;
+      var meta = document.createElement("span");
+      meta.className = "meta num";
+      meta.textContent = m.time + " ";
+      if (m.tick){ var tk=document.createElement("span"); tk.className="tk"+(m.read?" read":""); tk.textContent=m.tick; meta.appendChild(tk); }
+      el.appendChild(meta);
+      host.appendChild(el);
+      return {el:el, t:m.t};
+    });
+  }
+  var cO = document.getElementById("cOffice"), cH = document.getElementById("cHL");
+  var oMsgs = build(office, cO);
+  var hMsgs = build(hl, cH);
+  var typing = document.createElement("div"); typing.className="typing"; typing.setAttribute("aria-hidden","true");
+  typing.innerHTML="<i></i><i></i><i></i>"; cH.appendChild(typing);
+  var agentTimes = hl.filter(function(m){return m.who==="agent";}).map(function(m){return m.t;});
+  /* hide oldest bubbles that would be clipped at the top of the chat column */
+  function fit(chat, msgs){
+    msgs.forEach(function(m){ m.el.classList.remove("gone"); });
+    var limit = chat.getBoundingClientRect().top + parseFloat(getComputedStyle(chat).paddingTop) - 1;
+    for (var k=0;k<msgs.length;k++){
+      var el = msgs[k].el;
+      if (!el.classList.contains("show")) continue;
+      if (el.getBoundingClientRect().top - 10 < limit) el.classList.add("gone"); else break;
+    }
+  }
+
+  var tO = document.getElementById("tOffice"), tH = document.getElementById("tHL");
+  var uO = document.getElementById("uOffice"), uH = document.getElementById("uHL");
+  var vO = document.getElementById("vOffice"), vH = document.getElementById("vHL");
+  var lO = document.getElementById("laneOffice"), lH = document.getElementById("laneHL");
+  var prog = document.getElementById("prog"), race = document.getElementById("race");
+
+  function plural(n, one, two, few, many){ return n===1?one: n===2?two: (n>=3&&n<=10)? n+" "+few : n+" "+many; }
+  var fill = document.getElementById("fill");
+  function hms(s){ s=Math.floor(s); return pad(Math.floor(s/3600))+":"+pad(Math.floor(s/60)%60)+":"+pad(s%60); }
+
+  /* progress p (0..1) -> seconds elapsed. first 35% = first minute */
+  function secAt(p){
+    if (p<=.35) return p/.35*60;
+    if (p<=.6)  return 60 + (p-.35)/.25*(3600-60);
+    if (p<=.9)  return 3600 + (p-.6)/.3*(LOST-3600);
+    return LOST;
+  }
+  function show(msgs, s){
+    msgs.forEach(function(m){
+      var on = s>=m.t;
+      if (on && !m.el.classList.contains("show")){ m.el.classList.add("show"); requestAnimationFrame(function(){ m.el.classList.add("in"); }); }
+      if (!on && m.el.classList.contains("show")){ m.el.classList.remove("show","in"); }
+    });
+  }
+  var last=-1;
+  function render(p){
+    p = Math.max(0, Math.min(1, p));
+    if (Math.abs(p-last)<0.0005) return; last=p;
+    var s = secAt(p);
+    prog.style.width = (p*100)+"%";
+    tO.textContent = hms(s);
+    show(oMsgs, s);
+    var lost = s>=LOST;
+    if (lost !== lO.classList.contains("lost")){ vO.classList.remove("slam"); if(lost){ void vO.offsetWidth; vO.classList.add("slam"); } }
+    lO.classList.toggle("lost", lost);
+    if (lost){ uO.textContent = "7:37 الصبح. أول ما فتح الموظف الجوال."; vO.textContent = "العميل اتصل على مكتب ثاني."; }
+    else if (s<60){ uO.textContent = "ثواني… والرسالة بصح واحد رمادي"; vO.textContent=""; }
+    else if (s<3600){ uO.textContent = plural(Math.floor(s/60),"دقيقة","دقيقتين","دقايق","دقيقة")+" بدون رد"; vO.textContent=""; }
+    else { uO.textContent = plural(Math.floor(s/3600),"ساعة","ساعتين","ساعات","ساعة")+" بدون رد"; vO.textContent=""; }
+    fill.style.setProperty("--f", (Math.log(1+s)/Math.log(1+LOST)).toFixed(4));
+
+    var sh = Math.min(s, HL_DONE);
+    tH.textContent = hms(sh);
+    show(hMsgs, s);
+    var won = s>=HL_DONE;
+    lH.classList.toggle("won", won);
+    uH.textContent = won ? "انحجز قبل لا تكمل الدقيقة" : (s>=4 ? "رد بعد 4 ثواني — يأهّل الحين" : "يكتب…");
+    vH.textContent = won ? "معاينة محجوزة." : "";
+    var typingOn = agentTimes.some(function(at){ return s < at && s >= at-3.5; }) && s>=0.5;
+    typing.classList.toggle("on", typingOn);
+    fit(cO, oMsgs); fit(cH, hMsgs);
+  }
+
+  var playing=false, playStart=0, playFrom=0, playBtn=document.getElementById("play"), raf=0;
+  var PLAY_MS = 60000;
+  function scrollP(){
+    var r = race.getBoundingClientRect(), span = race.offsetHeight - window.innerHeight;
+    return span>0 ? -r.top/span : 0;
+  }
+  function onScroll(){ if(!playing) render(scrollP()); }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  window.addEventListener("resize", onScroll);
+  function stop(){ playing=false; cancelAnimationFrame(raf); playBtn.setAttribute("aria-pressed","false"); playBtn.textContent="شغّل الدقيقة ▸"; }
+  function loop(now){
+    var p = playFrom + (now-playStart)/PLAY_MS;
+    render(p);
+    if (p>=1){ stop(); return; }
+    raf = requestAnimationFrame(loop);
+  }
+  function play(){
+    playing=true; playFrom=0; last=-1; playStart=performance.now();
+    playBtn.setAttribute("aria-pressed","true"); playBtn.textContent="إيقاف ■";
+    if (reduce){ render(1); stop(); return; }
+    raf = requestAnimationFrame(loop);
+  }
+  playBtn.addEventListener("click", function(){ playing ? stop() : play(); });
+  ["wheel","touchmove"].forEach(function(ev){ window.addEventListener(ev, function(){ if(playing){ stop(); } }, {passive:true}); });
+  document.querySelectorAll("[data-play]").forEach(function(a){
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      var y = race.getBoundingClientRect().top + window.scrollY - 52;
+      window.scrollTo({top:y, behavior: reduce?"auto":"smooth"});
+      setTimeout(play, reduce?0:700);
+    });
+  });
+  render(scrollP());
+})();
+</script>
+</body>
+</html>
