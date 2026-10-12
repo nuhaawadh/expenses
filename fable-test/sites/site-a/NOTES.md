@@ -1,6 +1,6 @@
 # site-a — «ليلة المكتب» — build notes
 
-Single file `index.html`, about 46 KB, with inline CSS and vanilla JS. Fonts: Reem Kufi for display, IBM Plex Sans Arabic for body, both from Google Fonts with `display=swap`.
+Single file `index.html`, about 47 KB, with inline CSS and vanilla JS. Fonts: Readex Pro (600–700) for display and the wordmark, IBM Plex Sans Arabic for body, both from Google Fonts with `display=swap`. Reem Kufi was dropped in the director round.
 Numerals: Arabic-Indic (٠–٩) used everywhere, including the clock, the chat timestamps, the phone status bar and the step numbers. Latin appears only in `highlink.tech`, the email and the credit line, each wrapped in `bdi` or an `ltr` span.
 
 **Signature piece:** the hero phone plays a WhatsApp conversation in Saudi dialect. It goes السلام عليكم → budget and move date → two slots → السبت ٥:٠٠ م → «انضاف لتقويم المكتب» calendar card. It includes typing indicators and double ticks that turn green when the client replies. Timestamps follow a simulated night clock: it starts at 11:47 م ليلة الخميس and runs 12× faster, so it passes midnight and the day label flips to «فجر الجمعة». The chat is labelled as illustrative («الاسم والأرقام افتراضية»). «شاهد ديمو دقيقة» scrolls to the phone, restarts the chat and flashes the phone frame.
@@ -82,3 +82,26 @@ Numerals: Arabic-Indic (٠–٩) used everywhere, including the clock, the chat 
 Reduced-motion users get the full static conversation in the booked state.
 
 **errors:** `[]` on all 6 final shots (a-*-p3.png were re-rendered after the fixes). Overflow check at 390px: `scrollWidth` is 390, and no element extends past the viewport.
+
+## Director round (shots a-*-p4.png)
+1. **Wordmark:** «هاي لينك» is now set in Readex Pro 700. It no longer reads as «ماي لينك».
+2. **Display face:** switched from Reem Kufi to Readex Pro everywhere.
+   - «أنواره.» now reads correctly, with no ة confusion and no kashida stretching.
+   - The grey/white two-tone headline is kept. The dim line is `nowrap` so «المكتب طفّى أنواره.» stays on one line on desktop.
+   - The h1 is resized for Readex's wider letterforms.
+3. **Clock:** the time is one `<bdi dir="ltr">` unit, «١١:٤٧:٤٥», all the same size. The seconds are only a darker amber, and «م» follows in RTL order. The old smaller, offset seconds and the bidi-override span are gone.
+4. **Desktop hero balance:**
+   - The phone and its caption share one wrapper the width of the phone.
+   - The «من البداية» chip now sits directly under the phone, flush with its left (end) edge.
+   - The screen height is tied to the viewport, `min(600px, 100svh-220px)`, and the hero top padding is reduced, so the phone centres against the text column.
+5. **Mobile first screen:**
+   - Hero spacing tightened (smaller h1 and lede, compact clock).
+   - The phone height is now `clamp(350px, 100svh-490px, 520px)`, so the entire phone, composer included, ends inside the first 844px screen.
+   - The secondary CTA stays «راسلنا» because «راسلنا على الإيميل» doesn't fit beside the primary CTA at 390px. The email now shows underneath in a `<bdi>`.
+   - **Chat behaviour:** when the thread is full it now anchors to the bottom, and the oldest bubble slides under the header like a scrolled WhatsApp chat. Before, bubbles were deleted, which on the short mobile phone left a single bubble and a dead gap.
+6. **Rhythm:** the jobs section's bottom padding was cut to clamp(40px, 5vw, 64px), which removes the empty band before "How it works".
+7. **Copy claims:**
+   - Step 1 is now «يشتغل على واتساب مكتبكم — عملاؤكم يراسلونكم على الواتساب مثل العادة، والوكيل هو اللي يرد عليهم بالليل وفي الويكند.» with no promise about keeping the same number.
+   - Step 3 heading is now «يربط مع تقويم المكتب».
+
+**errors:** `[]` on all 6 p4 shots. I also checked the booked state at 11.5 s: the calendar card shows in full on both desktop and mobile.
