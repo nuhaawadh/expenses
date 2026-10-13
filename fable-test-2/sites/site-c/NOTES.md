@@ -54,3 +54,10 @@ Final check after fixes: errors [] at 1440 and 390, overflow-x 0, file 39,335 by
 - The giant counter uses `textContent` swaps with no digit-roll animation, so it is intentionally abrupt and some may read it as static.
 - The minute's second marks are tied to DOM row positions, not exact time. A very fast flick can skip the event flash (by design, it only flashes on the landed second).
 - Desktop hero side cells are bottom-aligned, which leaves deliberate but large top whitespace in each cell at 900px height.
+
+## Director round
+1. **Desktop hero side cells:** each cell is now top-aligned like a spec sheet: label at the top edge, the big value and caption directly under it. Copy changed to «حتى لو الساعة 3 الفجر» (Western numeral, matching the page).
+2. **Mobile secondary CTA (≤600px):** the boxed button is now an underlined text link «راسلنا: highlink.sa@gmail.com», with the email in `<bdi>`. Desktop keeps the boxed «راسلنا بالإيميل».
+3. **Empty seconds on mobile (≤600px):** non-event, non-quarter rows collapse to 15px, half height, with an 11px number. All 61 rows remain. Event rows and the 15/30/45 office notes keep full height, so the runs 05–10, 21–26, 51–59 read as time ticking past. Mobile page height dropped from 9,642 to 8,907px.
+4. **Digit roll:** when the second changes by exactly 1, the sticky numeral rolls in vertically (0.18em, opacity 0.35→1, 180ms, `cubic-bezier(.16,1,.3,1)`), from below going forward and from above going back. Jumps larger than 1 just swap the digits. It's skipped under prefers-reduced-motion (Web Animations API, gated by matchMedia). I verified it with a stepped-scroll script: the roll fired on ±1 steps and the console stayed clean.
+5. **Shots:** c-{d,m}-{top,mid,bot}-p4.png re-rendered from the current code (mid = second 20). **Errors: [] on all 6.** Overflow-x 0 at 390.

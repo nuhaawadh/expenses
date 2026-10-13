@@ -61,6 +61,7 @@ bdi{unicode-bidi:isolate}
 .btn-solid:hover{background:var(--green);color:var(--black)}
 .btn-line{background:transparent;color:var(--black)}
 .btn-line:hover{background:var(--black);color:var(--concrete)}
+.m-only{display:none}
 
 /* ---------- hero ---------- */
 .hero{border-block-end:var(--rule);min-block-size:calc(100vh - 75px);min-block-size:calc(100svh - 75px);display:flex;flex-direction:column}
@@ -74,7 +75,7 @@ bdi{unicode-bidi:isolate}
 .lede{margin-block:28px 36px;font-size:20px;max-inline-size:44ch}
 .ctas{display:flex;flex-wrap:wrap;gap:14px}
 .hero-side{display:flex;flex-direction:column}
-.hero-side .cell{padding:28px 32px;border-block-end:var(--rule);flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-side .cell{padding:28px 32px;border-block-end:var(--rule);flex:1;display:flex;flex-direction:column;justify-content:flex-start}
 .hero-side .cell:last-child{border-block-end:0}
 .cell-label{font-weight:800;font-size:14px;margin-block-end:6px}
 .cell p{font-size:16px;line-height:1.6}
@@ -309,6 +310,15 @@ bdi{unicode-bidi:isolate}
   .final p{font-size:18px}
   .foot .wrap{grid-template-columns:minmax(0,1fr)}
 }
+@media (max-width:600px){
+  .d-only{display:none}
+  .m-only{display:inline}
+  .ctas .btn-line{inline-size:auto;border:0;padding:6px 0;background:none;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px;font-size:17px}
+  .ctas .btn-line:hover{background:none;color:var(--black);text-decoration-thickness:4px}
+  .row:not(.ev):not(.q){min-block-size:15px}
+  .row:not(.ev):not(.q) .sec{font-size:11px;line-height:15px}
+  .row.now:not(.ev):not(.q) .sec{font-size:12px}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
@@ -339,11 +349,11 @@ bdi{unicode-bidi:isolate}
         <p class="lede">هاي لينك وكيل ذكاء اصطناعي يشتغل على واتساب مكتبكم: يرد على العميل خلال ثواني، يعرف وش يبي، ويحجز المعاينة في تقويم المكتب. بالليل، وفي الويكند، وفي وقت الدوام.</p>
         <div class="ctas">
           <a class="btn btn-solid" href="#minute">شاهد ديمو دقيقة <span class="arr" aria-hidden="true">←</span></a>
-          <a class="btn btn-line" href="mailto:highlink.sa@gmail.com">راسلنا بالإيميل</a>
+          <a class="btn btn-line" href="mailto:highlink.sa@gmail.com"><span class="d-only">راسلنا بالإيميل</span><span class="m-only">راسلنا: <bdi>highlink.sa@gmail.com</bdi></span></a>
         </div>
       </div>
       <div class="hero-side">
-        <div class="cell"><p class="cell-label">يرد</p><p class="cell-big"><bdi dir="ltr">24/7</bdi></p><p>حتى الساعة ثلاث الفجر.</p></div>
+        <div class="cell"><p class="cell-label">يرد</p><p class="cell-big"><bdi dir="ltr">24/7</bdi></p><p>حتى لو الساعة 3 الفجر.</p></div>
         <div class="cell"><p class="cell-label">التجربة</p><p class="cell-big">أسبوعين</p><p>مجانًا، على استفسارات حقيقية.</p></div>
         <div class="cell"><p class="cell-label">المدن</p><ul class="cities"><li>الخبر</li><li>الدمام</li><li>الظهران</li><li>القطيف</li></ul></div>
       </div>
@@ -607,6 +617,7 @@ bdi{unicode-bidi:isolate}
   }
   function render(s){
     if(s===cur) return; var prev=cur; cur=s;num.textContent=pad(s);
+    if(prev!==-1&&Math.abs(s-prev)===1&&num.animate&&!window.matchMedia('(prefers-reduced-motion:reduce)').matches){var dir=s>prev?1:-1;num.animate([{transform:'translateY('+(dir*0.18)+'em)',opacity:0.35},{transform:'translateY(0)',opacity:1}],{duration:180,easing:'cubic-bezier(.16,1,.3,1)'});}
     if((EVENTS.indexOf(s)>-1&&s>0||s===60)&&prev!==-1){num.classList.add('hit');clearTimeout(render.t);render.t=setTimeout(function(){num.classList.remove('hit');},450);}
     clock.dataset.phase=s>=60?'end':(s>=4?'go':'start');
     for(var k=0;k<tk.length;k++) tk[k].classList.toggle('on',k<s);
