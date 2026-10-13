@@ -56,3 +56,12 @@ Upgrade: a pen nib (an orange dot) rides the coverage line while it traces. It r
 - The coastline is stylised and only approximate. District positions are roughly placed, not surveyed.
 - Markazi Text 700 is heavy at h2 sizes in the dark demo section. A 600 weight might sit better.
 - The demo chat auto-plays once on scroll in about 3 seconds. That is fast for a "minute" demo, and the replay button is small.
+
+## Director round (`b-{d,m}-{top,map,mid,bot,q1,q3}-p5.png`, plus `b-x-*` city states)
+1. **Stray circle:** removed both `.plate::before/::after` corner circles. I didn't make them survey marks because they weren't doing any job. The plate frame is now a clean ruled border.
+2. **Desktop hero empty paper:** the spec column («نطاق المسح / ساعات العمل / القناة», now 310px so «المكتب» no longer wraps alone) shares grid row 1 with the headline and sits beside its top line. The h1 keeps 330px clear for it. I also tightened the hero padding and gaps (h1 max 72px). The plate's top edge moved from y≈600 to y≈525 at 1440×900, so the first screen now ends on the map with all four city tabs and the field-note heading in view.
+3. **Mobile map crop:** at ≤700px, `matchMedia` switches the viewBox from `40 30 520 670` to `0 30 560 670`. The graticule now runs to x=0. «القطيف» sits about 45px inside the frame, and «العوامية» is well clear of the edge when active.
+4. **Mobile orphan dots:** at 390, the districts of cities that aren't selected now carry faint labels (Almarai, 16 SVG units, graphite at 60%). The selected city's districts stay at full ink and 21 units. I checked all four city states and found no collisions.
+5. **Mobile secondary CTA:** the boxed «راسلنا بالإيميل» in the hero is now an underlined teal text link «راسلنا: highlink.sa@gmail.com», with the email in `<bdi dir="ltr">`. It is the same on desktop, where it sits beside the primary button.
+6. **Demo pace:** each message is now preceded by a typing indicator. Three bouncing dots appear on the speaker's side, with `role=status`, and the label reads «العميل يكتب…» or «الوكيل يكتب…». Customer messages take about 1.2s (0.7s typing + 0.5s hold) and agent messages about 1.7s (1.1s + 0.6s), for roughly 12s in total. Replay is now a solid 44px button with an icon, «أعد تشغيل الديمو». With reduced motion, everything shows at once.
+Errors: `[]` on every p5 shot and on the city/keyboard script. At 390, scrollWidth = clientWidth = 390.
