@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>هاي لينك · الخريطة</title>
+<meta name="description" content="هاي لينك: وكيل ذكاء اصطناعي على واتساب لمكاتب العقار في الخبر والدمام والظهران والقطيف. يرد خلال ثواني، يأهّل العميل، ويحجز المعاينة.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@700&family=Markazi+Text:wght@500;600;700&family=Noto+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF7F0; --paper-2:#F3EEE2; --land:#F1ECDF; --grid:#E7E1D3;
+  --ink:#22262B; --teal:#1F6F78; --orange:#D9622B; --orange-deep:#B9501F;
+  --olive:#6B7A3A; --olive-text:#5A6730; --muted:#62666B;
+  --f-display:"Markazi Text", "Noto Naskh Arabic", serif;
+  --f-body:"Noto Sans Arabic", system-ui, sans-serif;
+  --f-label:"Almarai", "Noto Sans Arabic", sans-serif;
+  --ease-out:cubic-bezier(.22,.8,.24,1);
+  --ease-pen:cubic-bezier(.55,.06,.3,1);
+  --gutter:clamp(16px, 4vw, 56px);
+  --max:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{
+  margin:0; background-color:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:17px; line-height:1.75;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:24px 24px; background-position:-1px -1px;
+}
+h1,h2,h3{font-family:var(--f-display); font-weight:700; line-height:1.2; text-wrap:balance; margin:0}
+p{text-wrap:pretty; margin:0}
+a{color:var(--teal)}
+:focus-visible{outline:3px solid var(--orange-deep); outline-offset:3px; border-radius:2px}
+bdi{unicode-bidi:isolate}
+.skip{position:absolute; inset-inline-start:16px; top:-60px; background:var(--ink); color:var(--paper); padding:10px 16px; z-index:50; text-decoration:none; transition:top .2s var(--ease-out)}
+.skip:focus{top:12px}
+.wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--gutter)}
+.label{font-family:var(--f-label); font-weight:700; font-size:13px; letter-spacing:0; color:var(--muted)}
+.kicker{display:inline-flex; align-items:center; gap:10px; font-family:var(--f-label); font-weight:700; font-size:14px; color:var(--teal)}
+.kicker::before{content:""; width:28px; height:2px; background:currentColor}
+
+/* header */
+.top{position:sticky; top:0; z-index:20; background:var(--paper); border-bottom:1px solid var(--grid)}
+.top .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:64px}
+.brand{display:flex; align-items:baseline; gap:10px; text-decoration:none; color:var(--ink)}
+.brand b{font-family:var(--f-body); font-weight:700; font-size:21px; letter-spacing:0}
+.brand span{font-family:var(--f-body); font-size:13px; color:var(--muted); font-weight:500}
+.nav{display:flex; align-items:center; gap:26px}
+.nav a{color:var(--ink); text-decoration:none; font-size:15px; font-weight:500}
+.nav a:not(.btn):hover{color:var(--teal)}
+.btn{display:inline-flex; align-items:center; gap:10px; min-height:48px; padding:0 22px; border-radius:3px; font-family:var(--f-body); font-weight:700; font-size:17px; text-decoration:none; cursor:pointer; border:2px solid transparent; transition:transform .25s var(--ease-out), background-color .25s var(--ease-out), box-shadow .25s var(--ease-out)}
+.btn-cta{background:var(--orange-deep); color:#fff; box-shadow:3px 3px 0 var(--ink)}
+.btn-cta:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink)}
+.btn-cta:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
+.btn-ghost{border-color:var(--ink); color:var(--ink); background:transparent}
+.btn-ghost:hover{background:var(--ink); color:var(--paper)}
+.btn svg{width:18px; height:18px; flex:none}
+.nav .btn{min-height:42px; font-size:15px; padding:0 16px}
+.nav a.btn-cta, .nav a.btn-cta:hover{color:#fff}
+
+/* hero */
+.hero{padding-block:clamp(36px,6vw,72px) 28px}
+.hero-grid{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr); gap:24px 64px; align-items:end}
+.hero h1{font-size:clamp(40px,5.4vw,76px); line-height:1.15; margin-top:14px; font-weight:700; max-width:16em}
+.hero h1 em{font-style:normal; color:var(--teal); position:relative; white-space:nowrap}
+.hero h1 em::after{content:""; position:absolute; inset-inline:0; bottom:.06em; height:.09em; background:var(--orange); opacity:.85; transform-origin:right; transform:scaleX(0); transition:transform 1s .3s var(--ease-pen)}
+.ready .hero h1 em::after{transform:scaleX(1)}
+.hero .lede{font-size:19px; color:var(--ink); max-width:36em; margin-top:4px}
+.msg,.bub,.lede,.t-d{text-wrap:pretty}
+.hero .actions{display:flex; flex-wrap:wrap; gap:14px; margin-top:28px; align-items:center}
+.survey-meta{border-inline-start:2px solid var(--ink); padding-inline-start:20px; display:grid; gap:14px; align-self:end; margin-bottom:6px}
+.survey-meta dt{font-family:var(--f-label); font-weight:700; font-size:13px; color:var(--muted)}
+.survey-meta dd{margin:2px 0 0; font-size:16px; line-height:1.6}
+.survey-meta dl{margin:0; display:grid; gap:14px}
+
+/* map plate */
+.plate{margin-top:36px; background:var(--paper); border:1.5px solid var(--ink); position:relative}
+.plate::before,.plate::after{content:""; position:absolute; width:14px; height:14px; border:1.5px solid var(--ink)}
+.plate::before{top:-8px; inset-inline-start:-8px; border-radius:50%; background:var(--paper)}
+.plate::after{bottom:-8px; inset-inline-end:-8px; border-radius:50%; background:var(--paper)}
+.plate-head{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 20px; border-bottom:1px solid var(--ink); flex-wrap:wrap}
+.plate-head h2{font-size:24px; line-height:1.3}
+.plate-head .label{color:var(--muted)}
+.plate-body{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.side{border-inline-end:1px solid var(--ink); display:flex; flex-direction:column}
+.tabs{display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--ink)}
+.tab{appearance:none; background:transparent; border:0; text-align:start; padding:14px 18px 14px; font:inherit; color:var(--ink); cursor:pointer; position:relative; border-bottom:1px solid var(--grid); transition:background-color .25s var(--ease-out)}
+.tab:nth-child(odd){border-inline-end:1px solid var(--grid)}
+.tab:nth-child(n+3){border-bottom:0}
+.tab .t-name{display:flex; align-items:center; gap:10px; font-family:var(--f-display); font-weight:700; font-size:26px; line-height:1.2}
+.tab .t-name svg{width:14px; height:14px; flex:none; color:var(--muted); transition:color .25s var(--ease-out)}
+.tab .t-d{display:block; font-size:13.5px; color:var(--muted); line-height:1.6; margin-top:2px}
+.tab:hover{background:var(--paper-2)}
+.tab[aria-selected="true"]{background:var(--land)}
+.tab[aria-selected="true"] .t-name svg{color:var(--orange)}
+.tab[aria-selected="true"]::after{content:""; position:absolute; inset-inline-start:0; top:0; bottom:0; width:4px; background:var(--orange)}
+.note{padding:22px 22px 24px; flex:1; display:flex; flex-direction:column; gap:14px}
+.note-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap}
+.note-head h3{font-size:24px}
+.msg{max-width:92%; padding:12px 16px; line-height:1.7; font-size:16px; border:1px solid var(--ink); position:relative}
+.msg .who{display:block; font-family:var(--f-label); font-weight:700; font-size:12.5px; color:var(--muted); margin-bottom:2px}
+.msg.in{background:#fff; align-self:flex-start; border-radius:2px 14px 14px 14px}
+.msg.out{background:#E4EFEE; border-color:var(--teal); align-self:flex-end; border-radius:14px 2px 14px 14px}
+.msg.out .who{color:var(--teal)}
+.tags{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:2px}
+.tags .label{color:var(--olive-text)}
+.tag{font-family:var(--f-label); font-weight:700; font-size:13px; color:var(--olive-text); border:1px dashed var(--olive); padding:3px 10px; border-radius:2px; background:#F4F3E6}
+.fine{font-size:13.5px; color:var(--muted); line-height:1.6}
+.note > *{transition:opacity .45s var(--ease-out), transform .45s var(--ease-out)}
+.note.swap > *{opacity:0; transform:translateY(6px)}
+.key{margin:auto 0 0; padding-top:16px; border-top:1px dashed var(--grid); display:flex; flex-wrap:wrap; gap:8px 22px}
+.key div{display:flex; align-items:center; gap:8px}
+.key dt{display:flex}
+.key svg{height:18px; width:auto}
+.key dd{margin:0; font-family:var(--f-label); font-weight:700; font-size:12.5px; color:var(--muted)}
+.mapbox{position:relative; background:var(--paper)}
+.mapbox svg{display:block; width:100%; height:auto; direction:ltr}
+.m-seafill{fill:#1F6F78; fill-opacity:.045}
+.mapbox .stamp{position:absolute; bottom:12px; inset-inline-end:14px; font-family:var(--f-label); font-weight:700; font-size:12.5px; color:var(--muted); background:var(--paper); border:1px solid var(--grid); padding:4px 10px}
+
+/* svg map styles */
+.m-land{fill:var(--land)}
+.m-coast{fill:none; stroke:var(--ink); stroke-width:1.6; stroke-linejoin:round}
+.m-water{fill:none; stroke:var(--teal); stroke-width:1; stroke-linejoin:round}
+.m-grat{stroke:#DDD5C4; stroke-width:1}
+.m-sea{font-family:var(--f-display); font-size:30px; fill:var(--teal); font-weight:600; letter-spacing:0}
+.m-city text{font-family:var(--f-display); font-weight:700; font-size:25px; fill:var(--ink); paint-order:stroke; stroke:var(--land); stroke-width:5px; stroke-linejoin:round}
+.m-city .trig{fill:var(--paper); stroke:var(--ink); stroke-width:1.6; transition:fill .3s var(--ease-out)}
+.m-city{cursor:pointer}
+.m-city.on .trig{fill:var(--orange); stroke:var(--orange-deep)}
+.m-city:focus-visible{outline:none}
+.m-city:focus-visible text{fill:var(--orange-deep)}
+.m-dist circle{fill:var(--paper); stroke:var(--muted); stroke-width:1.4; transition:fill .3s var(--ease-out), stroke .3s var(--ease-out)}
+.m-dist text{font-family:var(--f-label); font-weight:700; font-size:13.5px; fill:var(--muted); paint-order:stroke; stroke:var(--land); stroke-width:4px; stroke-linejoin:round; transition:fill .3s var(--ease-out)}
+.m-dist.sea text{stroke:var(--paper)}
+.m-dist circle{transform-box:fill-box; transform-origin:center}
+.m-dist.on circle{fill:var(--orange); stroke:var(--orange-deep)}
+.m-dist.pop circle{animation:pop .5s var(--ease-out) both}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.6)}100%{transform:scale(1)}}
+.m-dist.on text{fill:var(--ink)}
+.m-cover{fill:var(--orange); fill-opacity:0; stroke:var(--orange); stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; opacity:0; pointer-events:none}
+.m-cover.on{opacity:1}
+.m-cover.on.filled{fill-opacity:.08; transition:fill-opacity .6s var(--ease-out)}
+#nib{transition:opacity .3s var(--ease-out); pointer-events:none}
+.m-north text{font-family:var(--f-label); font-weight:700; font-size:12px; fill:var(--ink)}
+
+/* generic sections */
+section{scroll-margin-top:72px}
+.sec{padding-block:clamp(64px,9vw,120px)}
+.sec-head{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:48px; align-items:end; margin-bottom:44px}
+.sec-head h2{font-size:clamp(34px,4.4vw,58px); margin-top:12px}
+.sec-head p{font-size:18px; color:var(--ink); max-width:36em}
+
+/* pain */
+.pain{border-top:1.5px solid var(--ink)}
+.log{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1.5px solid var(--ink); background:var(--paper)}
+.log-item{padding:24px 24px 26px; border-inline-end:1px solid var(--ink); display:flex; flex-direction:column; gap:8px}
+.log-item:last-child{border-inline-end:0}
+.log-time{font-family:var(--f-display); font-weight:700; font-size:40px; line-height:1.1}
+.log-time small{font-size:22px; color:var(--muted); font-weight:600}
+.log-day{font-family:var(--f-label); font-weight:700; font-size:13px; color:var(--muted)}
+.log-item p{font-size:16.5px}
+.log-item.loss{background:#FBEDE4}
+.log-item.loss .log-time{color:var(--orange-deep)}
+.gap-line{margin-top:22px; display:flex; align-items:center; gap:14px; font-size:17px}
+.gap-line .bar{flex:1; height:2px; background:repeating-linear-gradient(to left, var(--orange-deep) 0 8px, transparent 8px 14px)}
+.gap-line strong{font-family:var(--f-display); font-size:28px; color:var(--orange-deep); font-weight:700; white-space:nowrap}
+
+/* jobs (legend) */
+.legend{border-top:1.5px solid var(--ink)}
+.legend-row{display:grid; grid-template-columns:90px 64px minmax(0,1fr) minmax(0,1.1fr); gap:24px; align-items:start; padding-block:26px; border-bottom:1px solid var(--ink)}
+.legend-row .n{font-family:var(--f-display); font-weight:700; font-size:54px; line-height:1; color:var(--teal)}
+.legend-row .sym{width:46px; height:46px; color:var(--ink)}
+.legend-row h3{font-size:30px; line-height:1.25}
+.legend-row p{font-size:17px; color:var(--ink)}
+
+/* demo */
+.demo{background:var(--ink); color:var(--paper); background-image:linear-gradient(rgba(250,247,240,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(250,247,240,.06) 1px, transparent 1px); background-size:24px 24px}
+.demo .kicker{color:#8FD0D5}
+.demo .sec-head p{color:#D9D4C8}
+.demo-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:48px; align-items:start}
+.chat{background:var(--paper); color:var(--ink); border:1.5px solid var(--paper); padding:0; position:relative}
+.chat-head{display:flex; justify-content:space-between; align-items:center; padding:12px 18px; border-bottom:1px solid var(--ink); gap:10px}
+.chat-head b{font-family:var(--f-body); font-weight:700}
+.chat-body{padding:18px; display:flex; flex-direction:column; gap:10px; min-height:520px}
+.bub{max-width:86%; padding:10px 14px 8px; border:1px solid var(--ink); font-size:16px; line-height:1.7; transition:opacity .4s var(--ease-out), transform .4s var(--ease-out)}
+.bub.in{align-self:flex-start; background:#fff; border-radius:2px 14px 14px 14px}
+.bub.out{align-self:flex-end; background:#E4EFEE; border-color:var(--teal); border-radius:14px 2px 14px 14px}
+.bub .ts{display:block; font-family:var(--f-label); font-weight:700; font-size:12px; color:var(--muted); margin-top:2px; text-align:end}
+.bub.pending{opacity:0; transform:translateY(8px)}
+.cal{align-self:flex-end; width:min(330px,92%); border:1.5px solid var(--ink); background:var(--paper); display:grid; grid-template-columns:72px 1fr; transition:opacity .4s var(--ease-out), transform .4s var(--ease-out)}
+.cal.pending{opacity:0; transform:translateY(8px)}
+.cal .d{background:var(--orange-deep); color:#fff; display:grid; place-items:center; text-align:center; padding:10px 6px; line-height:1.2}
+.cal .d b{font-family:var(--f-display); font-size:34px; display:block}
+.cal .d span{font-family:var(--f-label); font-size:12px; font-weight:700}
+.cal .c{padding:10px 14px; font-size:15px; line-height:1.6}
+.cal .c strong{display:block; font-size:16px}
+.chat-foot{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 18px; border-top:1px solid var(--ink); flex-wrap:wrap}
+.replay{appearance:none; background:none; border:1.5px solid var(--ink); font:inherit; font-weight:700; font-size:14px; padding:4px 14px; cursor:pointer; color:var(--ink); border-radius:2px; min-height:36px}
+.replay:hover{background:var(--ink); color:var(--paper)}
+.steps{list-style:none; margin:0; padding:0; counter-reset:s}
+.steps li{display:grid; grid-template-columns:76px minmax(0,1fr); gap:18px; padding-block:18px; border-top:1px solid rgba(250,247,240,.25)}
+.steps li:last-child{border-bottom:1px solid rgba(250,247,240,.25)}
+.steps .when{font-family:var(--f-display); font-weight:700; font-size:30px; line-height:1.1; color:#8FD0D5}
+.steps h3{font-size:24px; color:var(--paper)}
+.steps p{color:#D9D4C8; font-size:16px; margin-top:4px}
+.steps li.active .when{color:#F4A57E}
+.demo .fine{color:#B9B3A6; margin-top:18px}
+
+/* trial */
+.strip{display:grid; grid-template-columns:repeat(14,minmax(0,1fr)); border:1.5px solid var(--ink); background:var(--paper)}
+.day{border-inline-end:1px solid var(--grid); min-height:96px; padding:8px 8px; display:flex; flex-direction:column; justify-content:space-between}
+.day:last-child{border-inline-end:0}
+.day b{font-family:var(--f-display); font-size:26px; line-height:1}
+.day span{font-family:var(--f-label); font-weight:700; font-size:11.5px; color:var(--muted); line-height:1.4}
+.day.k{background:var(--land)}
+.day.live{background-image:repeating-linear-gradient(135deg, rgba(31,111,120,.16) 0 1.5px, transparent 1.5px 7px)}
+.strip-note{display:flex; align-items:center; gap:10px; margin-top:12px; font-size:14px; color:var(--muted)}
+.strip-note i{width:28px; height:14px; border:1px solid var(--grid); background-image:repeating-linear-gradient(135deg, rgba(31,111,120,.3) 0 1.5px, transparent 1.5px 7px)}
+.day.end{background:var(--orange-deep); color:#fff}
+.day.end span{color:#fff}
+.strip-legend{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin-top:28px; border-top:1px solid var(--ink)}
+.strip-legend div{padding:20px 0 0; padding-inline-end:28px}
+.strip-legend h3{font-size:26px}
+.strip-legend p{font-size:16.5px; margin-top:6px}
+.promise{margin-top:56px; display:grid; grid-template-columns:auto minmax(0,1fr); gap:28px; align-items:center; padding:28px 32px; border:1.5px solid var(--ink); background:var(--paper)}
+.promise .seal{width:96px; height:96px}
+.promise p{font-family:var(--f-display); font-weight:600; font-size:clamp(26px,3vw,38px); line-height:1.3; text-wrap:balance}
+
+/* final */
+.final{border-top:1.5px solid var(--ink); text-align:center}
+.final h2{font-size:clamp(40px,6vw,80px); max-width:14em; margin-inline:auto}
+.final p{font-size:19px; margin:20px auto 0; max-width:32em}
+.final .actions{display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:32px}
+.mail{font-family:var(--f-body); font-weight:500; font-size:18px; color:var(--teal)}
+
+footer{border-top:1.5px solid var(--ink); background:var(--paper); padding-block:36px 40px}
+.foot{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:end}
+.foot p{font-size:15px; color:var(--muted); line-height:1.7}
+.foot .credit{color:var(--ink); font-weight:500; text-align:right}
+.foot .brand b{font-size:22px}
+.foot-links{display:flex; gap:22px; flex-wrap:wrap; font-size:15px}
+
+/* reveal */
+.rv{transition:opacity .7s var(--ease-out), transform .7s var(--ease-out)}
+.js .rv:not(.in){opacity:0; transform:translateY(14px)}
+
+@media (max-width: 1020px){
+  .hero-grid{grid-template-columns:1fr; gap:28px}
+  .survey-meta dl{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .plate-body{grid-template-columns:1fr}
+  .side{border-inline-end:0; border-bottom:1px solid var(--ink); order:2}
+  .mapbox{order:1}
+  .sec-head{grid-template-columns:1fr; gap:16px}
+  .demo-grid{grid-template-columns:1fr}
+  .legend-row{grid-template-columns:64px 52px minmax(0,1fr)}
+  .legend-row p{grid-column:3}
+}
+@media (max-width: 700px){
+  body{font-size:16px}
+  .nav a:not(.btn){display:none}
+  .brand span{display:none}
+  .hero{padding-top:26px}
+  .hero .lede{font-size:17px}
+  .hero .actions{display:grid; grid-template-columns:1fr; gap:12px}
+  .hero .actions .btn, .final .actions .btn{justify-content:center}
+  .final .actions{display:grid; grid-template-columns:1fr}
+  .survey-meta{display:none}
+  .plate{margin-top:26px}
+  .plate-head{padding:10px 14px}
+  .plate-head h2{font-size:21px}
+  .tabs{grid-template-columns:1fr}
+  .tab{padding:10px 16px; display:flex; align-items:baseline; justify-content:space-between; gap:12px; border-inline-end:0 !important; border-bottom:1px solid var(--grid) !important}
+  .tab:last-child{border-bottom:0 !important}
+  .tab .t-d{margin:0; text-align:end}
+  .br-wide{display:none}
+  .hero-grid{gap:18px}
+  .tab .t-name{font-size:23px}
+  .note{padding:18px 16px 20px}
+  .log{grid-template-columns:1fr}
+  .log-item{border-inline-end:0; border-bottom:1px solid var(--ink)}
+  .log-item:last-child{border-bottom:0}
+  .gap-line{flex-wrap:wrap}
+  .gap-line .bar{flex-basis:100%; order:3}
+  .legend-row{grid-template-columns:48px minmax(0,1fr); gap:6px 16px}
+  .legend-row .sym{display:none}
+  .legend-row .n{font-size:42px; grid-row:span 2}
+  .legend-row p{grid-column:2}
+  .legend-row h3{font-size:25px}
+  .strip{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .day{min-height:72px; border-bottom:1px solid var(--grid); padding:6px 5px}
+  .day b{font-size:22px}
+  .day span{font-size:10.5px}
+  .strip-legend{grid-template-columns:1fr}
+  .promise{grid-template-columns:1fr; padding:22px 18px; justify-items:start}
+  .promise .seal{width:72px; height:72px}
+  .foot{grid-template-columns:1fr}
+  .chat-body{min-height:0; padding:14px}
+  .m-dist text{font-size:21px; stroke-width:5px}
+  .m-dist:not(.on) text{display:none}
+  .m-city text{font-size:34px; stroke-width:6px}
+  .m-sea{font-size:40px}
+  .mapbox .stamp{position:static; display:block; border:0; border-top:1px solid var(--grid); padding:8px 14px; text-align:start}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition-duration:.01ms !important; animation-duration:.01ms !important; scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">تخطَّ إلى المحتوى</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="هاي لينك، الصفحة الرئيسية"><b>هاي لينك</b><span><bdi dir="ltr">Highlink</bdi></span></a>
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      <a href="#map">الخريطة</a>
+      <a href="#jobs">وش يسوي</a>
+      <a href="#trial">التجربة</a>
+      <a class="btn btn-cta" href="#demo">شاهد ديمو دقيقة</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="h1">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="h1box" style="grid-column:1 / -1">
+          <span class="kicker">دليل ميداني لمكاتب العقار · المنطقة الشرقية</span>
+          <h1 id="h1">وكيل واتساب يعرف <em>أحياء الشرقية</em><br class="br-wide"> ويرد على عميلك في ثواني</h1>
+        </div>
+        <div>
+          <p class="lede">هاي لينك وكيل ذكاء اصطناعي يشتغل على واتساب مكتبكم: يرد على كل استفسار خلال ثواني، ليل نهار، يسأل العميل عن الإيجار أو الشراء والميزانية والحي، ويحجز المعاينة في تقويم المكتب.</p>
+          <div class="actions">
+            <a class="btn btn-cta" href="#demo">شاهد ديمو دقيقة
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10H4m5-5-5 5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="mailto:highlink.sa@gmail.com">راسلنا بالإيميل</a>
+          </div>
+        </div>
+        <div class="survey-meta">
+          <dl>
+            <div><dt>نطاق المسح</dt><dd>الخبر، الدمام، الظهران، القطيف</dd></div>
+            <div><dt>ساعات العمل</dt><dd><bdi dir="ltr">24/7</bdi>، والويكند داخل</dd></div>
+            <div><dt>القناة</dt><dd>واتساب مكتبكم، مربوط مع تقويم المكتب</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="plate" id="map" aria-labelledby="map-title">
+        <div class="plate-head">
+          <h2 id="map-title">لوحة 1 · الأرض اللي يعرفها الوكيل</h2>
+          <span class="label">اختر مدينة: يرسم الوكيل نطاقها ويوريك كيف يرد</span>
+        </div>
+        <div class="plate-body">
+          <div class="side">
+            <div class="tabs" role="tablist" aria-label="المدن الأربع">
+              <button class="tab" role="tab" id="tab-dammam" aria-controls="note" aria-selected="true" tabindex="0" data-city="dammam">
+                <span class="t-name"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 13 12.5H1Z" fill="currentColor"/></svg>الدمام</span>
+                <span class="t-d">الشاطئ · الفيصلية · النخيل</span>
+              </button>
+              <button class="tab" role="tab" id="tab-khobar" aria-controls="note" aria-selected="false" tabindex="-1" data-city="khobar">
+                <span class="t-name"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 13 12.5H1Z" fill="currentColor"/></svg>الخبر</span>
+                <span class="t-d">العقربية · الراكة · الحزام&nbsp;الذهبي</span>
+              </button>
+              <button class="tab" role="tab" id="tab-dhahran" aria-controls="note" aria-selected="false" tabindex="-1" data-city="dhahran">
+                <span class="t-name"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 13 12.5H1Z" fill="currentColor"/></svg>الظهران</span>
+                <span class="t-d">الدوحة · القصور</span>
+              </button>
+              <button class="tab" role="tab" id="tab-qatif" aria-controls="note" aria-selected="false" tabindex="-1" data-city="qatif">
+                <span class="t-name"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 13 12.5H1Z" fill="currentColor"/></svg>القطيف</span>
+                <span class="t-d">تاروت · العوامية · سيهات</span>
+              </button>
+            </div>
+            <div class="note" id="note" role="tabpanel" aria-labelledby="tab-dammam" aria-live="polite">
+              <div class="note-head"><h3 id="note-title">ملاحظة ميدانية: الدمام</h3><span class="label">مثال توضيحي</span></div>
+              <div class="msg in"><span class="who">عميل</span><span id="note-q"></span></div>
+              <div class="msg out"><span class="who">وكيل هاي لينك</span><span id="note-a"></span></div>
+              <div class="tags" id="note-tags"></div>
+              <dl class="key" aria-label="مفتاح الخريطة">
+                <div><dt><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3 17 16H3Z" fill="#FAF7F0" stroke="#22262B" stroke-width="1.5"/></svg></dt><dd>مدينة</dd></div>
+                <div><dt><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="4.5" fill="#FAF7F0" stroke="#62666B" stroke-width="1.5"/></svg></dt><dd>حي يسأل عنه العملاء</dd></div>
+                <div><dt><svg viewBox="0 0 28 20" aria-hidden="true"><path d="M2 14 C8 4 18 4 26 12" fill="none" stroke="#D9622B" stroke-width="2.2" stroke-linecap="round"/></svg></dt><dd>نطاق تغطية الوكيل</dd></div>
+              </dl>
+            </div>
+          </div>
+          <div class="mapbox">
+            <svg id="map-svg" viewBox="40 30 520 670" role="group" aria-labelledby="map-svg-t map-svg-d">
+              <title id="map-svg-t">خريطة توضيحية لساحل المنطقة الشرقية</title>
+              <desc id="map-svg-d">رسم مبسّط وليس بمقياس، يوضح القطيف شمالاً ثم الدمام ثم الظهران والخبر جنوباً على ساحل الخليج العربي، مع أحياء مختارة في كل مدينة.</desc>
+              <defs>
+                <clipPath id="seaClip"><path id="seaShape" d=""/></clipPath>
+                <filter id="pen" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+              </defs>
+              <g id="grat"></g>
+              <path class="m-land" id="land" d=""/>
+              <path class="m-seafill" id="seafill" d=""/>
+              <g clip-path="url(#seaClip)" id="waterlines"></g>
+              <path class="m-land" id="tarout" d="M216 108 C226 96 252 98 262 108 C270 118 266 136 252 143 C238 149 222 145 214 134 C209 126 210 115 216 108Z"/>
+              <path class="m-coast" d="M216 108 C226 96 252 98 262 108 C270 118 266 136 252 143 C238 149 222 145 214 134 C209 126 210 115 216 108Z"/>
+              <path class="m-coast" id="coast" d=""/>
+              <text class="m-sea" x="486" y="300" text-anchor="middle">الخليج</text>
+              <text class="m-sea" x="486" y="338" text-anchor="middle">العربي</text>
+              <g class="m-north" transform="translate(500 92)">
+                <path d="M0 -26 L9 6 L0 0 L-9 6Z" fill="#22262B"/>
+                <circle r="16" fill="none" stroke="#22262B" stroke-width="1"/>
+                <text y="26" text-anchor="middle">شمال</text>
+              </g>
+              <g id="covers"></g>
+              <g id="dists"></g>
+              <g id="cities"></g>
+              <circle id="nib" r="5" fill="#D9622B" stroke="#FAF7F0" stroke-width="2" opacity="0"/>
+            </svg>
+            <span class="stamp">رسم توضيحي مبسّط · ليس بمقياس</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec pain" id="pain" aria-labelledby="pain-h">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div>
+          <span class="kicker">لوحة 2 · وين يضيع العميل</span>
+          <h2 id="pain-h">الاستفسار يجي بالليل، والرد يجي الصبح</h2>
+        </div>
+        <p>أغلب رسائل العقار توصل بعد الدوام وفي الويكند. لين يفتح الموظف واتساب، العميل يكون اتصل على مكتب ثاني وحجز عنده المعاينة.</p>
+      </div>
+      <div class="log rv" aria-label="مثال توضيحي لاستفسار ضاع">
+        <div class="log-item">
+          <span class="log-day">الخميس · مثال توضيحي</span>
+          <span class="log-time"><bdi dir="ltr" data-t="23:40">11:40</bdi> <small>م</small></span>
+          <p>«أبي شقة إيجار في الراكة، ثلاث غرف، متى أقدر أشوفها؟»</p>
+        </div>
+        <div class="log-item">
+          <span class="log-day">الجمعة</span>
+          <span class="log-time"><bdi dir="ltr">08:20</bdi> <small>ص</small></span>
+          <p>العميل ما انتظر. أرسل نفس الرسالة لمكتب ثاني، ورد عليه أول واحد.</p>
+        </div>
+        <div class="log-item loss">
+          <span class="log-day">الجمعة</span>
+          <span class="log-time"><bdi dir="ltr" data-t="09:15">09:15</bdi> <small>ص</small></span>
+          <p>موظفكم يرد: «هلا، متوفرة». العميل: «مشكور، حجزت خلاص».</p>
+        </div>
+      </div>
+      <p class="gap-line rv"><span>من الرسالة إلى أول رد:</span><strong id="gap">9 ساعات و35 دقيقة</strong><span class="bar" aria-hidden="true"></span></p>
+    </div>
+  </section>
+
+  <section class="sec" id="jobs" aria-labelledby="jobs-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div>
+          <span class="kicker">مفتاح الخريطة · وش يسوي الوكيل</span>
+          <h2 id="jobs-h">أربع مهام، كلها على واتساب</h2>
+        </div>
+        <p>نفس الشغل اللي يسويه أشطر موظف عندكم في أول دقيقة مع العميل، بس بدون ما ينام وبدون ما ينشغل باتصال ثاني.</p>
+      </div>
+      <div class="legend">
+        <div class="legend-row rv">
+          <span class="n">1</span>
+          <svg class="sym" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 11v12l8 5" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <h3>يرد خلال ثواني، <bdi dir="ltr">24/7</bdi></h3>
+          <p>الساعة ثلاث الفجر أو ظهر الجمعة، الرد يطلع فوراً وبلهجة مهذبة تشبه مكتبكم.</p>
+        </div>
+        <div class="legend-row rv">
+          <span class="n">2</span>
+          <svg class="sym" viewBox="0 0 46 46" aria-hidden="true"><path d="M23 5 41 39H5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="23" cy="28" r="4" fill="#D9622B"/></svg>
+          <h3>يأهّل العميل</h3>
+          <p>يعرف منه إيجار ولا شراء، الميزانية، والحي اللي يبيه، قبل ما يوصل لموظفكم.</p>
+        </div>
+        <div class="legend-row rv">
+          <span class="n">3</span>
+          <svg class="sym" viewBox="0 0 46 46" aria-hidden="true"><rect x="5" y="9" width="36" height="32" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 18h36M14 5v8M32 5v8" stroke="currentColor" stroke-width="2"/><path d="m16 29 5 5 9-9" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>يحجز المعاينة في تقويم المكتب</h3>
+          <p>يقترح المواعيد الفاضية ويثبّت الموعد مباشرة، وموظفكم يلقاه في التقويم جاهز.</p>
+        </div>
+        <div class="legend-row rv">
+          <span class="n">4</span>
+          <svg class="sym" viewBox="0 0 46 46" aria-hidden="true"><path d="M38 23a15 15 0 1 1-4.4-10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M35 5v8h-8" fill="none" stroke="#D9622B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>يتابع تلقائياً</h3>
+          <p>العميل اللي سأل وسكت، يرجع له الوكيل برسالة متابعة في وقت مناسب بدل ما يضيع.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec demo" id="demo" aria-labelledby="demo-h">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div>
+          <span class="kicker">ديمو دقيقة</span>
+          <h2 id="demo-h">من «السلام عليكم» إلى موعد معاينة، في دقيقة</h2>
+        </div>
+        <p>محادثة توضيحية بأسماء وهمية، تمشي بنفس ترتيب الشغل الحقيقي: رد، أسئلة تأهيل، ثم حجز في التقويم.</p>
+      </div>
+      <div class="demo-grid">
+        <div class="chat" aria-label="محادثة توضيحية">
+          <div class="chat-head"><b>أبو فهد · عميل</b><span class="label">واتساب المكتب · مثال توضيحي</span></div>
+          <div class="chat-body" id="chat">
+            <div class="bub in" data-step="0">السلام عليكم، عندكم شقق إيجار في العقربية؟<span class="ts"><bdi dir="ltr">0:00</bdi></span></div>
+            <div class="bub out" data-step="0">وعليكم السلام، حياك الله. نعم فيه خيارات في العقربية. الإيجار لعائلة ولا عزّاب؟ وكم غرفة تحتاج؟<span class="ts"><bdi dir="ltr">0:04</bdi></span></div>
+            <div class="bub in" data-step="1">عائلة، ثلاث غرف. وما أبي فوق خمسين ألف بالسنة<span class="ts"><bdi dir="ltr">0:15</bdi></span></div>
+            <div class="bub out" data-step="1">تمام، ثلاث غرف وبحدود خمسين ألف سنوي. تفضّل العقربية بس، ولا الراكة تنفع بعد؟<span class="ts"><bdi dir="ltr">0:20</bdi></span></div>
+            <div class="bub in" data-step="2">العقربية أحسن، قريبة من شغلي<span class="ts"><bdi dir="ltr">0:31</bdi></span></div>
+            <div class="bub out" data-step="2">عندنا موعدين فاضية للمعاينة: الخميس الساعة <bdi dir="ltr">5:30</bdi> العصر، أو السبت <bdi dir="ltr">10:00</bdi> الصبح. أيهم يناسبك؟<span class="ts"><bdi dir="ltr">0:38</bdi></span></div>
+            <div class="bub in" data-step="3">الخميس العصر<span class="ts"><bdi dir="ltr">0:47</bdi></span></div>
+            <div class="cal" data-step="3">
+              <div class="d"><span>الخميس</span><b><bdi dir="ltr">5:30</bdi></b><span>العصر</span></div>
+              <div class="c"><strong>معاينة: شقة 3 غرف، العقربية</strong>انضافت لتقويم المكتب · أبو فهد</div>
+            </div>
+          </div>
+          <div class="chat-foot"><span class="label" id="clock">المحادثة كاملة</span><button class="replay" id="replay" type="button">أعد التشغيل</button></div>
+        </div>
+        <div>
+          <ol class="steps" id="steps">
+            <li data-step="0"><span class="when"><bdi dir="ltr">0:04</bdi></span><div><h3>رد فوري</h3><p>الرد يطلع قبل ما يفكر العميل يراسل مكتب ثاني.</p></div></li>
+            <li data-step="1"><span class="when"><bdi dir="ltr">0:20</bdi></span><div><h3>تأهيل</h3><p>إيجار، ثلاث غرف، الميزانية. ثلاث معلومات تختصر على موظفكم نص المكالمة.</p></div></li>
+            <li data-step="2"><span class="when"><bdi dir="ltr">0:38</bdi></span><div><h3>يعرف الحي</h3><p>يفهم إن العقربية والراكة متجاورين ويقترح البديل بدون ما يضيّع العميل.</p></div></li>
+            <li data-step="3"><span class="when"><bdi dir="ltr">0:50</bdi></span><div><h3>موعد في التقويم</h3><p>الموعد ينحجز في تقويم المكتب، وموظفكم يستلم عميل جاهز للمعاينة.</p></div></li>
+          </ol>
+          <p class="fine">التوقيتات في المثال للتوضيح. الأسماء والعروض وهمية.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="trial" aria-labelledby="trial-h">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div>
+          <span class="kicker">لوحة 3 · التجربة</span>
+          <h2 id="trial-h">أسبوعين على استفسارات حقيقية، مجاناً</h2>
+        </div>
+        <p>ما نطلب منكم تصدقون الكلام. نشغّل الوكيل على استفسارات مكتبكم الحقيقية لمدة أسبوعين، وتحكمون بأنفسكم من المعاينات المحجوزة.</p>
+      </div>
+      <div class="strip rv" id="strip" aria-label="أيام التجربة الأربعة عشر"></div>
+      <p class="strip-note"><i aria-hidden="true"></i>أيام يرد فيها الوكيل على استفساراتكم الحقيقية</p>
+      <div class="strip-legend rv">
+        <div><h3>يوم 1</h3><p>نربط الوكيل مع واتساب مكتبكم وتقويم المكتب، ونعطيه أحياءكم وعروضكم.</p></div>
+        <div><h3>الأيام 2 إلى 13</h3><p>يرد على الاستفسارات الحقيقية ليل نهار، وتشوفون كل محادثة وكل موعد انحجز.</p></div>
+        <div><h3>يوم 14</h3><p>نجلس سوا ونقارن المعاينات المحجوزة بقبل التجربة.</p></div>
+      </div>
+      <div class="promise rv">
+        <svg class="seal" viewBox="0 0 96 96" aria-hidden="true">
+          <circle cx="48" cy="48" r="44" fill="none" stroke="#B9501F" stroke-width="2"/>
+          <circle cx="48" cy="48" r="36" fill="none" stroke="#B9501F" stroke-width="1" stroke-dasharray="3 4"/>
+          <path d="m32 49 11 11 21-23" fill="none" stroke="#B9501F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p>إذا ما تحسّنت المعاينات المحجوزة خلال الأسبوعين، المكتب ما يدفع شي.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec final" id="contact" aria-labelledby="final-h">
+    <div class="wrap">
+      <span class="kicker">آخر نقطة على الخريطة</span>
+      <h2 id="final-h" style="margin-top:14px">خلّ الوكيل يمسك الاستفسارات، وفريقكم يمسك المعاينات</h2>
+      <p>شوف الديمو، وإذا عجبك راسلنا على الإيميل ونرتب التجربة لمكتبك في الخبر أو الدمام أو الظهران أو القطيف.</p>
+      <div class="actions">
+        <a class="btn btn-cta" href="#demo">شاهد ديمو دقيقة</a>
+        <a class="btn btn-ghost" href="mailto:highlink.sa@gmail.com?subject=%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%87%D8%A7%D9%8A%20%D9%84%D9%8A%D9%86%D9%83">ابدأ التجربة بالإيميل</a>
+      </div>
+      <p><a class="mail" href="mailto:highlink.sa@gmail.com"><bdi dir="ltr">highlink.sa@gmail.com</bdi></a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <a class="brand" href="#top"><b>هاي لينك</b><span><bdi dir="ltr">Highlink</bdi></span></a>
+      <p>وكيل ذكاء اصطناعي على واتساب لمكاتب العقار في المنطقة الشرقية.</p>
+      <p class="credit" dir="ltr">by Nuha Awad / <span lang="ar">نهى عوض</span></p>
+      <p>الخريطة رسم توضيحي مبسّط، والأحياء أمثلة وليست حدوداً رسمية.</p>
+    </div>
+    <div class="foot-links">
+      <a href="https://highlink.tech" rel="noopener"><bdi dir="ltr">highlink.tech</bdi></a>
+      <a href="mailto:highlink.sa@gmail.com"><bdi dir="ltr">highlink.sa@gmail.com</bdi></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){ var n=document.createElementNS(NS, tag); for(var k in attrs) n.setAttribute(k, attrs[k]); if(parent) parent.appendChild(n); return n; }
+
+  /* ---------- Arabic plurals (hours/minutes/days) ---------- */
+  function plural(n, one, two, few, many){
+    if(n===1) return one;
+    if(n===2) return two;
+    if(n>=3 && n<=10) return n+' '+few;
+    return n+' '+many;
+  }
+  function hours(n){ return plural(n,'ساعة','ساعتين','ساعات','ساعة'); }
+  function mins(n){ return plural(n,'دقيقة','دقيقتين','دقائق','دقيقة'); }
+  (function gap(){
+    var a='23:40', b='09:15';
+    var t=function(s){var p=s.split(':');return (+p[0])*60+(+p[1]);};
+    var d=(t(b)+1440-t(a))%1440, h=Math.floor(d/60), m=d%60;
+    var txt = h ? hours(h) : '';
+    if(m) txt += (txt?' و':'') + mins(m);
+    document.getElementById('gap').textContent = txt;
+  })();
+
+  /* ---------- trial strip ---------- */
+  (function strip(){
+    var s=document.getElementById('strip');
+    for(var i=1;i<=14;i++){
+      var d=document.createElement('div');
+      d.className='day'+(i===1?' k':'')+(i===14?' end':'');
+      var lab = i===1?'الربط':(i===14?'المقارنة':'');
+      if(i>1 && i<14) d.className+=' live';
+      d.innerHTML='<b>'+i+'</b><span>'+lab+'</span>';
+      s.appendChild(d);
+    }
+  })();
+
+  /* ---------- map geometry ---------- */
+  var coast = [[178,30],[181,70],[188,112],[196,160],[205,200],[222,230],[248,250],[280,262],[312,268],[338,286],[352,304],[384,316],[388,330],[356,334],[344,350],[342,384],[360,416],[396,440],[424,470],[442,512],[454,560],[456,610],[450,660],[440,700]];
+  function smooth(pts){
+    var d='M'+pts[0][0]+' '+pts[0][1];
+    for(var i=1;i<pts.length;i++){
+      var p0=pts[i-1], p1=pts[i];
+      var mx=(p0[0]+p1[0])/2, my=(p0[1]+p1[1])/2;
+      d += ' Q'+p0[0]+' '+p0[1]+' '+mx+' '+my;
+    }
+    var l=pts[pts.length-1]; d+=' L'+l[0]+' '+l[1];
+    return d;
+  }
+  var cd = smooth(coast);
+  document.getElementById('coast').setAttribute('d', cd);
+  document.getElementById('land').setAttribute('d', cd+' L0 700 L0 0 Z');
+  document.getElementById('seaShape').setAttribute('d', cd+' L600 700 L600 0 Z');
+  document.getElementById('seafill').setAttribute('d', cd+' L600 700 L600 0 Z');
+  var wl=document.getElementById('waterlines');
+  [6,13,22,34].forEach(function(o,i){
+    el('path',{d:cd,class:'m-water',transform:'translate('+o+' '+(o*0.15)+')',opacity:(0.55-i*0.12).toFixed(2)},wl);
+  });
+  var g=document.getElementById('grat');
+  for(var x=80;x<=560;x+=80){ el('line',{x1:x,y1:30,x2:x,y2:700,class:'m-grat'},g); }
+  for(var y=70;y<=700;y+=80){ el('line',{x1:40,y1:y,x2:560,y2:y,class:'m-grat'},g); }
+
+  var CITIES = {
+    qatif:  {name:'القطيف', at:[150,150], lab:[132,158,'end'],
+      d:[['العوامية',122,90,'end',-12,5],['تاروت',240,122,'start',34,5,1],['سيهات',190,262,'end',-12,5]],
+      cover:'M98 66 L172 58 L272 92 L280 152 L222 166 L232 246 L210 292 L166 282 L156 196 L102 128 Z',
+      q:'السلام عليكم، فيه شقق تمليك في سيهات أو تاروت؟ الميزانية حول 600 ألف.',
+      a:'هلا والله. فيه خيارات في سيهات وتاروت، وأحياناً العوامية. الشراء تمويل ولا كاش؟ وإذا يناسبك أحجز لك معاينة السبت الصبح.',
+      tags:['شراء','سيهات / تاروت','600 ألف']},
+    dammam: {name:'الدمام', at:[282,346], lab:[282,386,'middle'],
+      d:[['الشاطئ',316,292,'end',-12,5],['النخيل',242,318,'end',-12,5],['الفيصلية',210,376,'end',-12,5]],
+      cover:'M192 300 L250 286 L300 270 L336 290 L336 348 L304 398 L228 404 L186 380 Z',
+      q:'السلام عليكم، أبي شقة إيجار في الشاطئ أو النخيل، ثلاث غرف لعائلة.',
+      a:'وعليكم السلام، حياك الله. الشاطئ والنخيل كلها نغطيها. الإيجار سنوي ولا شهري؟ وكم الميزانية التقريبية بالسنة؟',
+      tags:['إيجار','3 غرف','الشاطئ / النخيل']},
+    dhahran:{name:'الظهران', at:[326,540], lab:[312,548,'end'],
+      d:[['الدوحة',362,486,'end',-12,5],['القصور',300,594,'end',-12,5]],
+      cover:'M322 466 L388 474 L374 534 L344 616 L278 612 L282 558 Z',
+      q:'أدور دور أرضي في الدوحة أو القصور، يكون قريب من المدارس.',
+      a:'حياك. الدوحة والقصور فيها خيارات قريبة من المدارس. تبيه إيجار ولا تمليك؟ وكم غرفة تحتاج؟',
+      tags:['دور أرضي','الدوحة / القصور','قرب المدارس']},
+    khobar: {name:'الخبر', at:[430,578], lab:[446,586,'start'],
+      d:[['الراكة',392,452,'start',14,5,1],['العقربية',416,540,'start',14,5,1],['الحزام الذهبي',404,640,'end',-12,5]],
+      cover:'M370 436 L420 432 L446 500 L466 582 L452 666 L388 670 L380 600 L398 520 Z',
+      q:'عندكم فلل للبيع في الحزام الذهبي؟ أو العقربية إذا السعر أحسن.',
+      a:'أكيد. فيه خيارات في الحزام الذهبي والعقربية. الشراء كاش ولا تمويل بنكي؟ وكم حدّك الأعلى تقريباً؟',
+      tags:['شراء','فيلا','الحزام الذهبي / العقربية']}
+  };
+  var covers=document.getElementById('covers'), dists=document.getElementById('dists'), cities=document.getElementById('cities');
+  Object.keys(CITIES).forEach(function(k){
+    var c=CITIES[k];
+    c.coverEl = el('path',{d:c.cover,class:'m-cover',filter:'url(#pen)'},covers);
+    c.distEls = c.d.map(function(dd){
+      var gg = el('g',{class:'m-dist'+(dd[6]?' sea':'')},dists);
+      el('circle',{cx:dd[1],cy:dd[2],r:5},gg);
+      var t=el('text',{x:dd[1]+dd[4],y:dd[2]+dd[5],'text-anchor':dd[3]},gg); t.textContent=dd[0];
+      return gg;
+    });
+    var cg = el('g',{class:'m-city',tabindex:'0','data-city':k,role:'button','aria-label':'اختر '+c.name},cities);
+    cg.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(k,true); } });
+    var a=c.at;
+    el('path',{class:'trig',d:'M'+a[0]+' '+(a[1]-11)+' L'+(a[0]+10)+' '+(a[1]+7)+' L'+(a[0]-10)+' '+(a[1]+7)+' Z'},cg);
+    el('circle',{cx:a[0],cy:a[1]+1,r:2,fill:'#22262B'},cg);
+    var t=el('text',{x:c.lab[0],y:c.lab[1],'text-anchor':c.lab[2]},cg); t.textContent=c.name;
+    c.cityEl=cg;
+    cg.addEventListener('click',function(){ select(k,true); });
+  });
+
+  /* ---------- selection ---------- */
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var note=document.getElementById('note');
+  var current=null;
+  function trace(c){
+    var p=c.coverEl, L=p.getTotalLength();
+    p.classList.remove('filled');
+    p.style.transition='none';
+    p.style.strokeDasharray=L+' '+L;
+    p.style.strokeDashoffset=reduce?0:L;
+    p.getBoundingClientRect();
+    if(!reduce){
+      p.style.transition='stroke-dashoffset 1.5s var(--ease-pen)';
+      p.style.strokeDashoffset=0;
+      followNib(p, L);
+    }
+    setTimeout(function(){ if(p.classList.contains('on')) p.classList.add('filled'); }, reduce?0:1300);
+    if(!reduce) c.distEls.forEach(function(d,i){ d.classList.remove('pop'); setTimeout(function(){ if(d.classList.contains('on')){ d.classList.add('pop'); } }, 700+i*260); });
+  }
+  var nib=document.getElementById('nib'), nibRaf=0;
+  function followNib(p, L){
+    cancelAnimationFrame(nibRaf);
+    nib.setAttribute('opacity','1');
+    var t0=performance.now();
+    (function step(now){
+      var off=parseFloat(getComputedStyle(p).strokeDashoffset)||0;
+      var pt=p.getPointAtLength(Math.max(0, Math.min(L, L-off)));
+      nib.setAttribute('cx',pt.x); nib.setAttribute('cy',pt.y);
+      if(off>0.5 && now-t0<2500) nibRaf=requestAnimationFrame(step);
+      else nib.setAttribute('opacity','0');
+    })(t0);
+  }
+  function fillNote(c){
+    document.getElementById('note-title').textContent='ملاحظة ميدانية: '+c.name;
+    document.getElementById('note-q').textContent=c.q;
+    document.getElementById('note-a').textContent=c.a;
+    var tg=document.getElementById('note-tags'); tg.innerHTML='<span class="label">قيّد الوكيل:</span>';
+    c.tags.forEach(function(x){ var s=document.createElement('span'); s.className='tag'; s.textContent=x; tg.appendChild(s); });
+  }
+  function select(k, animate){
+    if(k===current) return;
+    current=k;
+    Object.keys(CITIES).forEach(function(j){
+      var c=CITIES[j], on=j===k;
+      c.coverEl.classList.toggle('on',on);
+      c.cityEl.classList.toggle('on',on);
+      c.distEls.forEach(function(d){ d.classList.toggle('on',on); });
+    });
+    tabs.forEach(function(t){
+      var on=t.dataset.city===k;
+      t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1;
+      if(on) note.setAttribute('aria-labelledby',t.id);
+    });
+    var c=CITIES[k];
+    if(animate && !reduce){
+      note.classList.add('swap');
+      setTimeout(function(){ fillNote(c); note.classList.remove('swap'); }, 220);
+    } else fillNote(c);
+    trace(c);
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){ select(t.dataset.city,true); });
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowLeft'||e.key==='ArrowDown') n=(i+1)%tabs.length;
+      else if(e.key==='ArrowRight'||e.key==='ArrowUp') n=(i-1+tabs.length)%tabs.length;
+      else if(e.key==='Home') n=0; else if(e.key==='End') n=tabs.length-1;
+      if(n!==null){ e.preventDefault(); tabs[n].focus(); select(tabs[n].dataset.city,true); }
+    });
+  });
+
+  /* ---------- demo chat ---------- */
+  var items=[].slice.call(document.querySelectorAll('#chat [data-step]'));
+  var steps=[].slice.call(document.querySelectorAll('#steps li'));
+  var clock=document.getElementById('clock');
+  var timers=[];
+  function play(){
+    timers.forEach(clearTimeout); timers=[];
+    if(reduce){ items.forEach(function(n){n.classList.remove('pending');}); return; }
+    items.forEach(function(n){ n.classList.add('pending'); });
+    steps.forEach(function(s){ s.classList.remove('active'); });
+    items.forEach(function(n,i){
+      timers.push(setTimeout(function(){
+        n.classList.remove('pending');
+        var st=+n.dataset.step;
+        steps.forEach(function(s){ s.classList.toggle('active', +s.dataset.step===st); });
+        var ts=n.querySelector('.ts bdi');
+        clock.textContent = ts ? 'الدقيقة تمشي · '+ts.textContent : 'انحجز الموعد';
+      }, 250+i*300));
+    });
+    timers.push(setTimeout(function(){ clock.textContent='المحادثة كاملة'; }, 250+items.length*300+200));
+  }
+  document.getElementById('replay').addEventListener('click',play);
+
+  /* ---------- reveal + start after fonts ---------- */
+  function start(){
+    document.documentElement.classList.add('ready');
+    select('dammam', false);
+    var rv=[].slice.call(document.querySelectorAll('.rv'));
+    var chatEl=document.getElementById('chat'), played=false;
+    if('IntersectionObserver' in window && !reduce){
+      var io=new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if(!e.isIntersecting) return;
+          if(e.target===chatEl){ if(!played){ played=true; play(); } }
+          else e.target.classList.add('in');
+          io.unobserve(e.target);
+        });
+      },{rootMargin:'0px 0px -8% 0px'});
+      rv.forEach(function(n){ io.observe(n); });
+      io.observe(chatEl);
+    } else rv.forEach(function(n){ n.classList.add('in'); });
+  }
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start, start);
+})();
+</script>
+</body>
+</html>
