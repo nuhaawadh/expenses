@@ -8,7 +8,7 @@ import { EntryEditor } from "@/components/EntryEditor";
 import { EntryList } from "@/components/EntryList";
 import { PlanBanner } from "@/components/PlanBanner";
 import { Summary } from "@/components/Summary";
-import { currentMonthKey, formatMonthLabel } from "@/lib/format";
+import { currentMonthKey, formatDayLabel, formatMonthLabel } from "@/lib/format";
 import { prepareReceipt } from "@/lib/image";
 import type {
   AddData,
@@ -117,6 +117,19 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
     }
   }
 
+  /**
+   * الحركة تُحفظ بتاريخها هي (تاريخ الفاتورة أو "أمس" في الجملة)، لا بتاريخ اليوم.
+   * لو وقع في شهر غير المعروض، كانت تختفي عن القائمة وتبدو كأنها ما انحفظت —
+   * فننقل العرض لشهرها ونقول للمستخدم وين راحت.
+   */
+  function followEntry(entry: Entry): string | null {
+    const day = (entry.spent_at ?? "").slice(0, 10);
+    const key = day.slice(0, 7);
+    if (!/^\d{4}-\d{2}$/.test(key) || key === month) return null;
+    setMonth(key);
+    return `انحفظت بتاريخ ${formatDayLabel(day)}، فنقلناك لشهر ${formatMonthLabel(key)}.`;
+  }
+
   async function addText(text: string) {
     setBusy(true);
     setStage("يقرأ الجملة…");
@@ -126,7 +139,10 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
 
     const result = await call<AddData>({ action: "add", text });
     await after(result, () => {
-      if (result.success) setNewestId(result.data.entry.id);
+      if (!result.success) return;
+      setNewestId(result.data.entry.id);
+      const moved = followEntry(result.data.entry);
+      if (moved) setNotice(moved);
     });
 
     setBusy(false);
@@ -154,9 +170,12 @@ export function Ledger({ user }: { user: { name: string; email: string } }) {
         if (!result.success) return;
         const entry = result.data.entry;
         setNewestId(entry.id);
+        const notes = [followEntry(entry)];
         if (entry.receipt_saved === false) {
-          setNotice("سُجّلت البيانات، لكن الصورة ما انحفظت.");
+          notes.push("سُجّلت البيانات، لكن الصورة ما انحفظت.");
         }
+        const text = notes.filter(Boolean).join(" ");
+        if (text) setNotice(text);
         /*
          * الباك إند يوازن الإجمالي مع المجموع الفرعي والضريبة. حين لا تتّسق
          * الأرقام تُحفظ الحركة على أفضل تقدير مع هذه العلامة — تُعرض بارزة

@@ -73,9 +73,9 @@ const dayShort = new Intl.DateTimeFormat(LOCALE_DATE, {
 });
 
 /**
- * وقت تسجيل الحركة، مختصراً.
- * إن سُجّلت في يوم غير يوم الحركة نفسها نُظهر التاريخ لا الساعة — لأن
- * الفارق بين «متى صُرف» و«متى سُجّل» هو المعلومة المفيدة حينها.
+ * وقت تسجيل الحركة: التاريخ والساعة دائماً، مثل «13 أكتوبر · 5:30 م».
+ * إن سُجّلت في يوم غير يوم الحركة نفسها (فاتورة قديمة مثلاً) نسبقها بـ«سُجّلت»
+ * حتى يتضح أن هذا وقت الإدخال لا وقت الصرف.
  */
 export function formatRecorded(
   createdAt: string | null,
@@ -92,9 +92,8 @@ export function formatRecorded(
     day: "2-digit",
   }).format(d);
 
-  return recordedDay === spentAt
-    ? timeOnly.format(d)
-    : `سُجّلت ${dayShort.format(d)}`;
+  const stamp = `${dayShort.format(d)} · ${timeOnly.format(d)}`;
+  return recordedDay === spentAt ? stamp : `سُجّلت ${stamp}`;
 }
 
 /** تاريخ اليوم بتوقيت الرياض بصيغة YYYY-MM-DD */
