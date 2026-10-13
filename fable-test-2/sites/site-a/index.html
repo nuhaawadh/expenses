@@ -83,6 +83,8 @@ p{margin:0;text-wrap:pretty}
 .btn-ghost{color:var(--paper);border:1px solid var(--line-2)}
 .btn-ghost:hover{background:rgba(243,239,230,.06)}
 .btn svg{width:18px;height:18px;flex:none}
+.textlink{color:var(--paper);font-weight:500;text-decoration:underline;text-decoration-color:rgba(124,242,195,.5);text-underline-offset:6px;padding-block:10px;transition:text-decoration-color .3s var(--ease-out)}
+.textlink:hover{text-decoration-color:var(--mint)}
 .fine{margin-block-start:18px;font-size:.88rem;color:var(--muted)}
 
 /* desk props */
@@ -102,7 +104,7 @@ p{margin:0;text-wrap:pretty}
 .screen::before{content:"";position:absolute;inset-block-start:10px;inset-inline-start:50%;transform:translateX(50%);width:90px;height:24px;border-radius:20px;background:#000}
 .lock{text-align:center;padding-block-start:58px;color:var(--paper)}
 .lock .day{font-size:.85rem;color:#C9D8D1}
-.lock .big{font-family:var(--f-display);font-weight:600;font-size:4.1rem;line-height:1.05;margin-block-start:2px}
+.lock .big{font-family:var(--f-ui);font-weight:500;font-size:4rem;line-height:1.1;margin-block-start:2px;font-variant-numeric:tabular-nums}
 .notes{position:absolute;inset-inline:12px;inset-block-start:200px;display:flex;flex-direction:column;gap:10px}
 .note{background:rgba(22,30,30,.88);border:1px solid rgba(124,242,195,.14);border-radius:18px;padding:11px 13px 12px;color:var(--paper);opacity:0;transform:translateY(-16px) scale(.97);transition:opacity .7s var(--ease-out),transform .9s var(--ease-out)}
 .note.on{opacity:1;transform:none}
@@ -278,12 +280,14 @@ footer{border-top:1px solid var(--line);padding-block:40px 48px;font-size:.9rem;
   .clock .lbl{display:none}
   .clock{padding:5px 12px;font-size:.8rem}
   .hero{min-height:auto;padding-block:92px 0;align-items:start}
-  .hero-grid{gap:30px}
+  .hero-grid{gap:20px}
   .hero h1{font-size:2.2rem;max-width:none}
   .hero .lede{margin-block-start:16px;font-size:1rem;line-height:1.85}
   .ctas{margin-block-start:24px}
-  .ctas .btn{flex:1 1 auto;justify-content:center}
-  .fine{margin-block-start:12px}
+  .hero .ctas{gap:6px 14px}
+  .hero .ctas .btn{flex:1 1 100%;justify-content:center}
+  .final .ctas .btn{flex:1 1 auto;justify-content:center}
+  .fine{margin-block-start:6px}
   .eyebrow{margin-block-end:16px;font-size:.82rem}
   .scene{height:430px;margin-inline:calc(var(--gut)*-1)}
   .phone{inset-block-start:0;transform:translate(50%,0) rotate(-4deg);width:270px;height:560px}
@@ -321,7 +325,7 @@ footer{border-top:1px solid var(--line);padding-block:40px 48px;font-size:.9rem;
       <a href="#demo">الديمو</a>
       <a href="#trial">التجربة</a>
     </nav>
-    <div class="clock" aria-hidden="true"><span class="pulse"></span><span class="lbl" id="clkDay">الخميس</span><b id="clkTime"><bdi dir="ltr">١١:٠٠</bdi> م</b><span class="lbl state" id="clkState">المكتب مقفل من ساعة</span></div>
+    <div class="clock" aria-hidden="true"><span class="pulse"></span><span class="lbl" id="clkDay">الجمعة</span><b id="clkTime"><bdi dir="ltr">١:١٤</bdi> ص</b><span class="lbl state" id="clkState">المكتب مقفل من ٣ ساعات</span></div>
   </div>
 </header>
 
@@ -335,7 +339,7 @@ footer{border-top:1px solid var(--line);padding-block:40px 48px;font-size:.9rem;
       <p class="lede">الاستفسارات تجي بالليل وفي الويكند. هاي لينك وكيل ذكاء اصطناعي يشتغل على واتساب مكتبكم: يرد خلال ثواني، يأهّل العميل، ويحجز موعد المعاينة في تقويم المكتب قبل لا يصحى أحد.</p>
       <div class="ctas">
         <a class="btn btn-mint" href="#demo">شاهد ديمو دقيقة <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
-        <a class="btn btn-ghost" href="mailto:highlink.sa@gmail.com">راسلنا بالإيميل</a>
+        <a class="textlink" href="mailto:highlink.sa@gmail.com">راسلنا: <bdi dir="ltr" class="mail">highlink.sa@gmail.com</bdi></a>
       </div>
       <p class="fine">تجربة مجانية أسبوعين على استفسارات حقيقية.</p>
     </div>
@@ -518,17 +522,17 @@ footer{border-top:1px solid var(--line);padding-block:40px 48px;font-size:.9rem;
 
   /* ---- night clock driven by scroll: 23:00 Thu -> 04:40 Fri (فجر) ---- */
   var clkTime = document.getElementById('clkTime'), clkDay = document.getElementById('clkDay'), clkState = document.getElementById('clkState');
-  var START = 23, END = 28 + 40/60, CLOSE = 22, last = '';
+  var START = 25 + 14/60, END = 28 + 40/60, CLOSE = 22, last = '';
   var topBar = document.querySelector('.top');
   function onScroll(){
     topBar.classList.toggle('solid', scrollY > 40);
     var max = Math.max(1, root.scrollHeight - innerHeight);
     var p = Math.min(1, Math.max(0, scrollY / max));
     var h = START + (END - START) * p;
-    var key = Math.floor(h * 6); // 10-minute steps
+    var key = Math.floor(h * 60); // minute steps
     if (key !== last){
       last = key;
-      var hs = Math.floor(h * 6) / 6;
+      var hs = key / 60;
       clkTime.innerHTML = timeHTML(hs);
       clkDay.textContent = hs >= 28.3 ? 'فجر الجمعة' : (hs >= 24 ? 'الجمعة' : 'الخميس');
       clkState.textContent = 'المكتب مقفل من ' + hours(Math.max(1, Math.floor(hs - CLOSE)));

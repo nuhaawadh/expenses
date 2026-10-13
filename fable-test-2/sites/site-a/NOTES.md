@@ -67,6 +67,12 @@ Fixes: the pain h2 is sized to its column with no max-width. On mobile the pain-
 
 **Upgrade:** a morning calendar notification («تقويم المكتب · ٧:٠٢ ص — موعد جديد انحجز بالليل: معاينة شقة تمليك، حي الشاطئ، الجمعة ٤:٣٠ م», labelled مثال توضيحي) drops in above the final CTA. It closes the demo's story: the office wakes up to the viewing that was booked overnight.
 
+## Director round
+Shots: `a-{d,m}-{top,mid,bot}-p4.png` from the current code. **Errors: [] on all 6.** Overflow: 390/390.
+1. **One time in the first screen:** the header night clock now starts at the latest notification, «الجمعة ١:١٤ ص · المكتب مقفل من ٣ ساعات», and moves forward in minute steps to «فجر الجمعة ٤:٤٠ ص» as the page scrolls. The initial HTML matches, so there is no flash of 11:00. «٣ ساعات» is the honest figure from a 10 PM close to 1:14; the director suggested ٤, but the plural helper computes from the real times.
+2. **Lock-screen numeral:** «١:١٤» is now set in IBM Plex Sans Arabic 500 (the app-UI face) with tabular numerals, instead of Readex Pro. I checked it at actual size in both top shots: it now reads as Arabic-Indic, not «I:IE».
+3. **Secondary CTA:** the boxed «راسلنا بالإيميل» is now an underlined text link «راسلنا: highlink.sa@gmail.com», with the email in `<bdi dir="ltr">` and a mint underline. I made the change on desktop too, for consistency. I also tightened the mobile hero gap and the trial-line margin. At 390x844 the phone's clock, the day and the whole first notification (text plus «انحجزت معاينة…») now sit above the fold.
+
 ## Remaining weaknesses (honest)
 - The demo really runs for about 45s, so a static screenshot of the demo usually shows only 1–3 messages. The «اعرضها كاملة» button and reduced-motion both show the full thread at once.
 - The desk props (paper, mug, keys) are abstract CSS shapes. They read as "objects on a desk" but are not refined illustrations.
